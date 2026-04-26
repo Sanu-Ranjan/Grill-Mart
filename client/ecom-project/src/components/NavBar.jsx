@@ -26,8 +26,13 @@ const Navbar = () => {
           <WishlistIcon />
 
           <CartIcon />
-
-          <LoginBtn />
+          <span
+            className="btn btn-warning"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate(ROUTES.PROFILE)}
+          >
+            <i className="bi bi-person-fill-gear"></i>
+          </span>
         </div>
       </div>
     </nav>
