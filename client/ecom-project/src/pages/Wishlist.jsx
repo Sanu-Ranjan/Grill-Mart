@@ -6,6 +6,7 @@ import { Navbar } from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../contexts/WishlistContext";
 import { useCart } from "../contexts/CartContext";
+import { ToastAlert } from "../components/ToastAlert";
 
 export const Wishlist = () => {
   const { data, loading, error, deleteItem } = useWishlist();
@@ -26,6 +27,7 @@ export const Wishlist = () => {
   return (
     <>
       <Navbar />
+      <ToastAlert />
       <div className="container py-4">
         <h4 className="fw-bold mb-4">My Wishlist ({items.length})</h4>
 
