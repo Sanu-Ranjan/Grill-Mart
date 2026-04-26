@@ -3,13 +3,14 @@ import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL } from "../constants";
 import { postData } from "../utils/postData";
 import { deleteData } from "../utils/deleteData";
+import { useToastAlert } from "./ToastAlertContext";
 const posturl = `${API_BASE_URL}/wishlist/item`;
 const deleteUrl = `${API_BASE_URL}/wishlist`;
 const WishListContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false);
-
+  const { addAlert } = useToastAlert();
   const { data, loading, error } = useFetch(
     `${API_BASE_URL}/wishlist`,
     refresh,
@@ -26,6 +27,7 @@ export const WishlistProvider = ({ children }) => {
       console.log(error);
     } else if (data?.success) {
       setRefresh((prev) => !prev);
+      addAlert("Item added", "Wish List");
     }
   };
 
@@ -39,6 +41,7 @@ export const WishlistProvider = ({ children }) => {
       console.log(error);
     } else if (data?.success) {
       setRefresh((prev) => !prev);
+      addAlert("Item removed", "Wish List");
     }
   };
 
