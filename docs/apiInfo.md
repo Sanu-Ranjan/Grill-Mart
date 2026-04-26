@@ -31,6 +31,8 @@
 - `GET "/"` : get all address
 - `GET "/id/:id"` : get an adress detail
 - `POST "/"` : add an adress
+- `PUT "/:id"` : update an address by id
+- `DELETE "/:id"` : delete an address by id
 
 **Order Routes** (`/api/v1/orders`)
 

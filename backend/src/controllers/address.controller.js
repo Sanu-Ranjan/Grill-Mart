@@ -28,6 +28,60 @@ const create = async (address) => {
   }
 };
 
+const deleteById = async (id) => {
+  try {
+    const deleted = await Address.findByIdAndDelete(id);
+    return ok(deleted);
+  } catch (error) {
+    return err(error);
+  }
+};
+
+const updateById = async (id, data) => {
+  try {
+    const updated = await Address.findByIdAndUpdate(id, data, {
+      returnDocument: "after",
+    });
+    return ok(updated);
+  } catch (error) {
+    return err(error);
+  }
+};
+
+const deleteAddress = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { data, error } = await deleteById(id);
+    if (error) {
+      console.log("Error deleting addresses", error);
+      return res
+        .status(500)
+        .json(failure("Internal server error : database operation failed"));
+    }
+    res.status(200).json(success({ deleted: data }, "Address Deleted"));
+  } catch (error) {
+    console.log("Error at controller: deleteAddress", error);
+    res.status(500).json(failure("Internal server error"));
+  }
+};
+
+const updateAddressById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const { data, error } = await updateById(id, body);
+    if (error) {
+      console.log("Error updating addresses", error);
+      return res
+        .status(500)
+        .json(failure("Internal server error : database operation failed"));
+    }
+    res.status(200).json(success({ updated: data }, "Address Updated"));
+  } catch (error) {
+    console.log("Error at controller: deleteAddress", error);
+    res.status(500).json(failure("Internal server error"));
+  }
+};
 const getAddresses = async (req, res) => {
   try {
     const { data, error } = await addresses();
@@ -90,4 +144,10 @@ const addAddress = async (req, res) => {
   }
 };
 
-module.exports = { getAddresses, getAddress, addAddress };
+module.exports = {
+  getAddresses,
+  getAddress,
+  addAddress,
+  deleteAddress,
+  updateAddressById,
+};
