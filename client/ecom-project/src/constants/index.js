@@ -6,4 +6,5 @@ export const ROUTES = {
   WISHLIST: "/wishlist",
   CART: "/cart",
   PROFILE: "/profile",
+  ORDER_SUMMARY: (orderId) => `/ordersummary/${orderId}`,
 };
