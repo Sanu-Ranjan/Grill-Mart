@@ -11,7 +11,7 @@ click here for models schema to be used: [Models](./docs/models.md)
 ## Roadmap / Milestones
 
 - [x] Step 1 : Add readme for database, app features and api end points
-- [ ] Step 2 : Backend Setup with Node.js, Express and MongoDB
+- [x] Step 2 : Backend Setup with Node.js, Express and MongoDB
 - [ ] Step 3 : Basic Front end Setup with Bootstrap, React
 - [ ] Step 4 : Make Front end Responsive (optional)
 - [ ] Step 5 : Deploy the full stack app
