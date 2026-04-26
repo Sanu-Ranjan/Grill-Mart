@@ -11,6 +11,9 @@ import {
 import { SearchProvider } from "./contexts/SearchContext";
 import { WishlistProvider } from "./contexts/WishlistContext";
 import { CartProvider } from "./contexts/CartContext";
+import { AddressProvider } from "./contexts/AddressContext";
+import { OrderSummary } from "./pages/OrderSummary";
+import { ToastAlertProvider } from "./contexts/ToastAlertContext";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,20 +36,28 @@ const router = createBrowserRouter([
     element: <Cart />,
   },
   {
-    path: "/user",
+    path: "/profile",
     element: <UserProfile />,
+  },
+  {
+    path: "/ordersummary/:orderId",
+    element: <OrderSummary />,
   },
 ]);
 
 function App() {
   return (
-    <CartProvider>
-      <WishlistProvider>
-        <SearchProvider>
-          <RouterProvider router={router} />
-        </SearchProvider>
-      </WishlistProvider>
-    </CartProvider>
+    <ToastAlertProvider>
+      <AddressProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <SearchProvider>
+              <RouterProvider router={router} />
+            </SearchProvider>
+          </WishlistProvider>
+        </CartProvider>
+      </AddressProvider>
+    </ToastAlertProvider>
   );
 }
 
