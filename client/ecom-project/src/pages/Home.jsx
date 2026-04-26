@@ -3,6 +3,7 @@ import { CategoryCard } from "../components/CategoryCard";
 import { Error } from "../components/Error";
 import { Loading } from "../components/Loading";
 import { Navbar } from "../components/NavBar";
+import { ToastAlert } from "../components/ToastAlert";
 import { API_BASE_URL } from "../constants/index";
 import { useFetch } from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
+      <ToastAlert />
       <div className="container py-4">
         {/* hero banner */}
         <div

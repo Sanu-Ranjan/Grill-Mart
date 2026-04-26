@@ -8,6 +8,7 @@ import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { FilterSidebar } from "../components/FilterSidebar";
 import { useSearch } from "../contexts/SearchContext";
+import { ToastAlert } from "../components/ToastAlert";
 
 export const ProductList = () => {
   const [filters, setFilters] = useState({
@@ -88,6 +89,7 @@ export const ProductList = () => {
   return (
     <>
       <Navbar />
+      <ToastAlert />
       <div className="container py-4">
         <div className="row g-4">
           <div className="col-12 col-md-3">
