@@ -1,0 +1,60 @@
+import { useAddress } from "../contexts/AddressContext";
+
+export const AddressCard = ({ address }) => {
+  const { selectedAddressId, setSelectedAddressId } = useAddress();
+  return (
+    <>
+      <div
+        key={address?._id}
+        className="border rounded-3 p-3"
+        style={{
+          cursor: "pointer",
+          borderColor: selectedAddressId === address?._id ? "#ffc107" : "",
+          borderWidth: selectedAddressId === address?._id ? "2px" : "1px",
+        }}
+        onClick={() => setSelectedAddressId(address?._id)}
+      >
+        <div className="d-flex gap-3 align-items-start">
+          <div
+            className="d-flex align-items-center justify-content-center rounded-circle border flex-shrink-0 mt-1"
+            style={{
+              width: "20px",
+              height: "20px",
+              background:
+                selectedAddressId === address?._id ? "#ffc107" : "white",
+              borderColor:
+                selectedAddressId === address?._id ? "#ffc107" : "#ccc",
+            }}
+          >
+            {selectedAddressId === address?._id && (
+              <i className="bi bi-check" style={{ fontSize: "13px" }}></i>
+            )}
+          </div>
+
+          <div>
+            <div className="d-flex align-items-center gap-2 mb-1">
+              <p className="fw-semibold mb-0" style={{ fontSize: "14px" }}>
+                {address?.name}
+              </p>
+              <span
+                className="badge bg-warning text-dark"
+                style={{ fontSize: "10px" }}
+              >
+                {address?.type}
+              </span>
+            </div>
+            <p className="text-muted mb-1" style={{ fontSize: "13px" }}>
+              {address?.addressLine}
+            </p>
+            <p className="text-muted mb-1" style={{ fontSize: "13px" }}>
+              {address?.city}, {address?.state} — {address?.pincode}
+            </p>
+            <p className="text-muted mb-0" style={{ fontSize: "13px" }}>
+              Phone: {address?.phone}
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
