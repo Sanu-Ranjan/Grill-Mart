@@ -3,13 +3,14 @@ import { ROUTES } from "../constants/index";
 import { useWishlist } from "../contexts/WishlistContext";
 import { useState } from "react";
 import { useCart } from "../contexts/CartContext";
+import { QuantityControls } from "../components/QuantityControls";
+import { Rating } from "./Rating";
+import { WishListButton } from "./WishlistButton";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { data, addItem, wishlistSet, deleteItem } = useWishlist();
-  const { addToCart } = useCart();
-
-  const isWishlisted = wishlistSet.has(product._id);
+  const { items, addToCart, itemMap, decQty, removeItem } = useCart();
 
   return (
     <div
@@ -37,11 +38,7 @@ const ProductCard = ({ product }) => {
           {product.name}
         </p>
 
-        <p className="text-warning mb-1" style={{ fontSize: "13px" }}>
-          {"★".repeat(Math.floor(product.rating))}
-          {"☆".repeat(5 - Math.floor(product.rating))}
-          <span className="text-muted ms-1">({product.rating})</span>
-        </p>
+        <Rating product={product} size={"13"} margin={"1"} />
 
         <div className="d-flex align-items-center gap-2 mb-3">
           <span className="fw-bold">₹{product.price}</span>
@@ -57,24 +54,10 @@ const ProductCard = ({ product }) => {
         </div>
 
         <div className="mt-auto d-flex gap-2">
-          <button
-            className="btn btn-warning btn-sm fw-semibold flex-grow-1"
-            onClick={() => addToCart(product._id)}
-          >
-            Add to Cart
-          </button>
-          <button
-            className="btn btn-outline-secondary btn-sm px-3 "
-            onClick={() =>
-              isWishlisted ? deleteItem(product._id) : addItem(product._id)
-            }
-          >
-            {isWishlisted ? (
-              <i className="bi-heart-fill text-danger"></i>
-            ) : (
-              <i className="bi bi-heart"></i>
-            )}
-          </button>
+          {/* quantity control */}
+          <QuantityControls product={product} />
+          {/* wishlist control */}
+          <WishListButton product={product} wishlistSet={wishlistSet} />
         </div>
       </div>
     </div>
