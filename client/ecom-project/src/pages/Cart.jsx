@@ -6,13 +6,28 @@ import { Navbar } from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { useWishlist } from "../contexts/WishlistContext";
+import { useAddress } from "../contexts/AddressContext";
+import { AddressCard } from "../components/AddressCard";
+import { postData } from "../utils/postData";
+import { ToastAlert } from "../components/ToastAlert";
 
 export const Cart = () => {
-  const { cart, cartId, items, loading, error, addToCart, decQty, removeItem } =
-    useCart();
-  const { addItem } = useWishlist();
-
   const navigate = useNavigate();
+  const {
+    cart,
+    cartId,
+    items,
+    loading,
+    error,
+    addToCart,
+    decQty,
+    removeItem,
+    emptyCart,
+  } = useCart();
+  const { addItem } = useWishlist();
+  const { addressData, selectedAddressId } = useAddress();
+  const addresses = addressData?.data?.addresses ?? [];
+  const selectedAddress = addresses.find(({ _id }) => selectedAddressId == _id);
 
   const moveToWishlist = async (id) => {
     await addItem(id);
@@ -31,12 +46,43 @@ export const Cart = () => {
   const deliveryCharge = subtotal > 999 ? 0 : 499;
   const total = subtotal + deliveryCharge;
 
+  const placeOrder = (items) => {
+    const orderItems = items.map(({ product, quantity }) => ({
+      productId: product._id,
+      quantity: quantity,
+    }));
+
+    const { name, phone, pincode, city, state, addressLine, type } =
+      selectedAddress;
+
+    const orderAddress = {
+      name: name,
+      phone: phone,
+      pincode: pincode,
+      city: city,
+      state: state,
+      addressLine: addressLine,
+      type: type,
+    };
+
+    const body = { items: orderItems, address: orderAddress };
+    (async () => {
+      const { data, error } = await postData(`${API_BASE_URL}/orders`, body);
+      if (error) return console.log("Error occoured placing order : ", error);
+      if (data.success === true) {
+        await emptyCart();
+        navigate(ROUTES.ORDER_SUMMARY(data.data.order._id));
+      }
+    })();
+  };
+
   if (loading) return <Loading />;
   if (error) return <Error />;
 
   return (
     <>
       <Navbar />
+      <ToastAlert />
       <div className="container py-4">
         <h4 className="fw-bold mb-4">My Cart ({items.length})</h4>
 
@@ -145,6 +191,17 @@ export const Cart = () => {
 
             {/* price details */}
             <div className="col-12 col-lg-4">
+              <div className="card border shadow-sm p-3 mb-3">
+                <button
+                  className="btn btn-warning fw-semibold w-100"
+                  onClick={() => navigate(ROUTES.PROFILE)}
+                >
+                  Choose different address
+                </button>
+                <hr />
+                <AddressCard address={selectedAddress} />
+              </div>
+
               <div className="card border shadow-sm p-4">
                 <h6
                   className="fw-bold text-muted mb-3"
@@ -186,9 +243,9 @@ export const Cart = () => {
                 </p>
                 <button
                   className="btn btn-warning fw-semibold w-100"
-                  onClick={() => navigate("/checkout")}
+                  onClick={() => placeOrder(items)}
                 >
-                  Place Order
+                  Check Out
                 </button>
               </div>
             </div>
