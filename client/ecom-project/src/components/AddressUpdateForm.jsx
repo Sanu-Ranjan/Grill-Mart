@@ -1,15 +1,21 @@
 import { useState } from "react";
 import { API_BASE_URL } from "../constants";
 
-export const AddressForm = ({ onSuccess }) => {
+export const AddressUpdateForm = ({
+  presentAddress,
+  onSuccess,
+  cancelEdit,
+}) => {
+  const { _id, name, type, addressLine, city, state, pincode, phone } =
+    presentAddress;
   const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    pincode: "",
-    city: "",
-    state: "",
-    addressLine: "",
-    type: "Home",
+    name: name,
+    phone: phone,
+    pincode: pincode,
+    city: city,
+    state: state,
+    addressLine: addressLine,
+    type: type,
   });
 
   const handleChange = (e) => {
@@ -18,8 +24,8 @@ export const AddressForm = ({ onSuccess }) => {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/address`, {
-        method: "POST",
+      const res = await fetch(`${API_BASE_URL}/address/${_id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
@@ -38,6 +44,7 @@ export const AddressForm = ({ onSuccess }) => {
             name="name"
             className="form-control form-control-sm"
             placeholder="Full Name"
+            value={form.name}
             onChange={handleChange}
           />
         </div>
@@ -46,6 +53,7 @@ export const AddressForm = ({ onSuccess }) => {
             name="phone"
             className="form-control form-control-sm"
             placeholder="Phone"
+            value={form.phone}
             onChange={handleChange}
           />
         </div>
@@ -54,6 +62,7 @@ export const AddressForm = ({ onSuccess }) => {
             name="addressLine"
             className="form-control form-control-sm"
             placeholder="Address Line"
+            value={form.addressLine}
             onChange={handleChange}
           />
         </div>
@@ -62,6 +71,7 @@ export const AddressForm = ({ onSuccess }) => {
             name="city"
             className="form-control form-control-sm"
             placeholder="City"
+            value={form.city}
             onChange={handleChange}
           />
         </div>
@@ -70,6 +80,7 @@ export const AddressForm = ({ onSuccess }) => {
             name="state"
             className="form-control form-control-sm"
             placeholder="State"
+            value={form.state}
             onChange={handleChange}
           />
         </div>
@@ -78,6 +89,7 @@ export const AddressForm = ({ onSuccess }) => {
             name="pincode"
             className="form-control form-control-sm"
             placeholder="Pincode"
+            value={form.pincode}
             onChange={handleChange}
           />
         </div>
@@ -85,6 +97,7 @@ export const AddressForm = ({ onSuccess }) => {
           <select
             name="type"
             className="form-select form-select-sm"
+            value={form.type}
             onChange={handleChange}
           >
             <option value="Home">Home</option>
@@ -92,12 +105,20 @@ export const AddressForm = ({ onSuccess }) => {
           </select>
         </div>
       </div>
-      <button
-        className="btn btn-warning btn-sm fw-semibold"
-        onClick={handleSubmit}
-      >
-        Save Address
-      </button>
+      <div className="d-flex align-items-center justify-content-between">
+        <button
+          className="btn btn-warning btn-sm fw-semibold"
+          onClick={handleSubmit}
+        >
+          Save Address
+        </button>
+        <button
+          className="btn btn-outline-secondary btn-sm fw-semibold"
+          onClick={() => cancelEdit()}
+        >
+          Cancel
+        </button>
+      </div>
     </div>
   );
 };
