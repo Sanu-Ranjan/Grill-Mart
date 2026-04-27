@@ -192,14 +192,23 @@ export const Cart = () => {
             {/* price details */}
             <div className="col-12 col-lg-4">
               <div className="card border shadow-sm p-3 mb-3">
-                <button
-                  className="btn btn-warning fw-semibold w-100"
-                  onClick={() => navigate(ROUTES.PROFILE)}
-                >
-                  Choose different address
-                </button>
+                {selectedAddress ? (
+                  <button
+                    className="btn btn-warning fw-semibold w-100"
+                    onClick={() => navigate(ROUTES.PROFILE)}
+                  >
+                    Choose different address
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-warning fw-semibold w-100"
+                    onClick={() => navigate(ROUTES.PROFILE)}
+                  >
+                    Select an address
+                  </button>
+                )}
                 <hr />
-                <AddressCard address={selectedAddress} />
+                {selectedAddress && <AddressCard address={selectedAddress} />}
               </div>
 
               <div className="card border shadow-sm p-4">
