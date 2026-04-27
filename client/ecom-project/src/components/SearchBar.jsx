@@ -33,8 +33,8 @@ export const SearchBaar = () => {
         />
       )}
       <div
-        className="d-flex align-items-center"
-        style={{ width: "35%", position: "relative", zIndex: 100 }}
+        className="d-flex align-items-center w-35"
+        style={{ position: "relative", zIndex: 100 }}
       >
         <div className="input-group mb-0">
           <input

@@ -11,18 +11,20 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-light bg-white shadow-sm px-4 py-3">
-      <div className="container-fluid d-flex align-items-center justify-content-between">
+      <div className="container-fluid d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
         <span
-          className="fw-bold fs-5"
+          className="order-1 order-sm-1 fw-bold fs-5"
           style={{ cursor: "pointer" }}
           onClick={() => navigate(ROUTES.HOME)}
         >
           GrillMart 🏠
         </span>
 
-        <SearchBaar />
+        <div className="order-3 order-sm-2">
+          <SearchBaar />
+        </div>
 
-        <div className="d-flex align-items-center gap-3">
+        <div className="order-2 order-sm-3 d-flex align-items-center gap-3">
           <WishlistIcon />
 
           <CartIcon />

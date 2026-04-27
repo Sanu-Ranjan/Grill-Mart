@@ -25,10 +25,10 @@ const Home = () => {
       <div className="container py-4">
         {/* hero banner */}
         <div
-          className="rounded-3 mb-5 d-flex align-items-center px-5"
+          className="rounded-3 mb-5 d-flex align-items-center px-5 py-3 py-sm-0"
           style={{ background: "#1a1a1a", minHeight: "260px" }}
         >
-          <div>
+          <div className="text-sm-start text-center">
             <p
               className="text-warning fw-semibold mb-1"
               style={{ fontSize: "13px", letterSpacing: "0.1em" }}
@@ -54,7 +54,10 @@ const Home = () => {
         </div>
 
         {/* categories heading */}
-        <h2 className="fw-semibold mb-4" style={{ fontSize: "1.3rem" }}>
+        <h2
+          className="fw-semibold mb-4 text-sm-start text-center"
+          style={{ fontSize: "1.3rem" }}
+        >
           Most Loved Categories
         </h2>
 

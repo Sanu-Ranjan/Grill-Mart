@@ -103,7 +103,7 @@ export const Cart = () => {
               <div className="d-flex flex-column gap-3">
                 {items.map(({ product, quantity, _id }) => (
                   <div className="card border shadow-sm p-3" key={_id}>
-                    <div className="d-flex gap-3">
+                    <div className="d-flex flex-column flex-sm-row gap-3">
                       {/* image */}
                       <img
                         src={product.image}
