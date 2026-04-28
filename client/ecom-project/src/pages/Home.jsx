@@ -1,4 +1,3 @@
-// pages/Home.jsx
 import { CategoryCard } from "../components/CategoryCard";
 import { Error } from "../components/Error";
 import { Loading } from "../components/Loading";
@@ -23,7 +22,6 @@ const Home = () => {
       <Navbar />
       <ToastAlert />
       <div className="container py-4">
-        {/* hero banner */}
         <div
           className="rounded-3 mb-5 d-flex align-items-center px-5 py-3 py-sm-0"
           style={{ background: "#1a1a1a", minHeight: "260px" }}
@@ -53,7 +51,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* categories heading */}
         <h2
           className="fw-semibold mb-4 text-sm-start text-center"
           style={{ fontSize: "1.3rem" }}
@@ -61,7 +58,6 @@ const Home = () => {
           Most Loved Categories
         </h2>
 
-        {/* category cards */}
         <div className="row g-3 justify-content-center">
           {data?.data?.categories?.map((category) => (
             <CategoryCard category={category} key={category._id} />

@@ -28,12 +28,7 @@ export const ToastAlert = () => {
   const { messageQ, clearAlert } = useToastAlert();
   return (
     <div aria-live="polite" aria-atomic="true" className="position-relative">
-      {/* <!-- Position it: -->
-      <!-- - `.toast-container` for spacing between toasts -->
-      <!-- - `top-0` & `end-0` to position the toasts in the upper right corner,  -->
-      <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  --> */}
       <div className="toast-container top-0 end-0 p-3">
-        {/* <!-- Then put toasts within --> */}
         {messageQ.length > 0 &&
           messageQ.map(({ message, subject }) => (
             <Alert message={message} subject={subject} clear={clearAlert} />

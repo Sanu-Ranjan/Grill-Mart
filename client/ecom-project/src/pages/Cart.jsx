@@ -98,13 +98,11 @@ export const Cart = () => {
           </div>
         ) : (
           <div className="row g-4">
-            {/* cart items */}
             <div className="col-12 col-lg-8">
               <div className="d-flex flex-column gap-3">
                 {items.map(({ product, quantity, _id }) => (
                   <div className="card border shadow-sm p-3" key={_id}>
                     <div className="d-flex flex-column flex-sm-row gap-3">
-                      {/* image */}
                       <img
                         src={product.image}
                         alt={product.name}
@@ -122,7 +120,6 @@ export const Cart = () => {
                       />
 
                       <div className="flex-grow-1">
-                        {/* name */}
                         <p
                           className="fw-semibold mb-1"
                           style={{ fontSize: "14px", cursor: "pointer" }}
@@ -133,7 +130,6 @@ export const Cart = () => {
                           {product.name}
                         </p>
 
-                        {/* price */}
                         <div className="d-flex align-items-center gap-2 mb-2">
                           <span className="fw-bold">₹{product.price}</span>
                           <span
@@ -150,7 +146,6 @@ export const Cart = () => {
                           </span>
                         </div>
 
-                        {/* quantity controls */}
                         <div className="d-flex align-items-center gap-2 mb-3">
                           <button
                             className="btn btn-outline-secondary btn-sm px-2 py-0"
@@ -167,7 +162,6 @@ export const Cart = () => {
                           </button>
                         </div>
 
-                        {/* action buttons */}
                         <div className="d-flex gap-2">
                           <button
                             className="btn btn-outline-secondary btn-sm"
@@ -189,7 +183,6 @@ export const Cart = () => {
               </div>
             </div>
 
-            {/* price details */}
             <div className="col-12 col-lg-4">
               <div className="card border shadow-sm p-3 mb-3">
                 {selectedAddress ? (

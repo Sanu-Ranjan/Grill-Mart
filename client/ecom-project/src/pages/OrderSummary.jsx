@@ -28,8 +28,6 @@ export const OrderSummary = () => {
     <>
       <Navbar />
       <div className="container py-4" style={{ maxWidth: "700px" }}>
-        {/* success banner */}
-
         <div
           className="rounded-3 p-4 mb-4 text-center"
           style={{ background: "#fff8e1" }}
@@ -51,7 +49,6 @@ export const OrderSummary = () => {
           </p>
         </div>
 
-        {/* order items */}
         <div className="card border shadow-sm p-4 mb-3">
           <h6 className="fw-bold mb-3">Items Ordered</h6>
           <hr />
@@ -62,7 +59,6 @@ export const OrderSummary = () => {
           </div>
         </div>
 
-        {/* price details */}
         <div className="card border shadow-sm p-4 mb-3">
           <h6 className="fw-bold mb-3">Price Details</h6>
           <hr />
@@ -89,7 +85,6 @@ export const OrderSummary = () => {
           </div>
         </div>
 
-        {/* delivery address */}
         <div className="card border shadow-sm p-4 mb-4">
           <h6 className="fw-bold mb-3">Delivery Address</h6>
           <hr />
@@ -115,7 +110,6 @@ export const OrderSummary = () => {
           </p>
         </div>
 
-        {/* actions */}
         <div className="d-flex gap-3">
           <button
             className="btn btn-warning fw-semibold flex-grow-1"

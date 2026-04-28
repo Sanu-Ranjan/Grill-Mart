@@ -87,7 +87,6 @@ export const ProductDetails = () => {
       <ToastAlert />
       <div className="container py-4">
         <div className="row g-4">
-          {/* image */}
           <div className="col-12 col-md-5">
             <div
               className="border rounded-3 d-flex align-items-center justify-content-center"
@@ -104,7 +103,6 @@ export const ProductDetails = () => {
               />
             </div>
 
-            {/* buy button */}
             <div className="d-flex gap-3 mt-3">
               <div className="col">
                 {quantity > 0 ? (
@@ -148,7 +146,6 @@ export const ProductDetails = () => {
             </div>
           </div>
 
-          {/* details */}
           <div className="col-12 col-md-7">
             <div className="d-flex align-items-center justify-content-between">
               <h5 className="fw-bold mb-2">{product?.name}</h5>
@@ -157,7 +154,6 @@ export const ProductDetails = () => {
 
             <Rating product={product} size={"16"} margin={"3"} />
 
-            {/* price */}
             <div className="d-flex align-items-center gap-3 mb-3">
               <span className="fw-bold" style={{ fontSize: "24px" }}>
                 ₹{product?.price}
@@ -173,7 +169,6 @@ export const ProductDetails = () => {
               </span>
             </div>
 
-            {/* in stock */}
             <p
               className={`fw-semibold mb-3 ${product?.inStock ? "text-success" : "text-danger"}`}
               style={{ fontSize: "13px" }}
@@ -181,13 +176,10 @@ export const ProductDetails = () => {
               {product?.inStock ? "✔ In Stock" : "✘ Out of Stock"}
             </p>
 
-            {/* sizes */}
             {product?.sizes?.length > 0 && <ProductSizes product={product} />}
 
-            {/* feature badges */}
             <FeatureBadges />
 
-            {/* category */}
             <div className="d-flex align-items-center justify-content-wrap g-1">
               <p className="fw-semibold mb-2" style={{ fontSize: "14px" }}>
                 Category:
@@ -212,7 +204,6 @@ export const ProductDetails = () => {
 
             <hr />
 
-            {/* description */}
             <div>
               <p className="fw-semibold mb-2" style={{ fontSize: "14px" }}>
                 Description:
