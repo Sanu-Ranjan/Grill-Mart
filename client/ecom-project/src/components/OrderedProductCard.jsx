@@ -2,7 +2,7 @@ import { ROUTES } from "../constants";
 import { useNavigate } from "react-router-dom";
 
 export const OredredProductCard = ({ item }) => {
-  const naigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div
