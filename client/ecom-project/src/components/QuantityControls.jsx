@@ -48,7 +48,7 @@ export const QuantityControls = ({ product, btnWarning = true }) => {
         <div className="d-flex align-items-center justify-content-between gap-2">
           <button
             className="btn btn-outline-secondary btn-sm px-2 py-0"
-            onClick={() => quantity > 1 && decQty(product?._id)}
+            onClick={() => quantity > 1 && handledecItem()}
             disabled={isBusy}
           >
             -
