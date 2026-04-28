@@ -7,6 +7,58 @@ import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../contexts/WishlistContext";
 import { useCart } from "../contexts/CartContext";
 import { ToastAlert } from "../components/ToastAlert";
+import { useRef, useState } from "react";
+
+const Buttons = ({ addToCart, deleteItem, item, loading }) => {
+  const [isBusy, setIsBusy] = useState(false);
+  const trackState = useRef([]);
+
+  if (trackState.current.length === 0 && isBusy && loading)
+    trackState.current.push(1);
+  if (trackState.current.length === 1 && isBusy && !loading) {
+    setIsBusy(false);
+    trackState.current = [];
+  }
+
+  const moveToCart = async (id) => {
+    setIsBusy(true);
+    try {
+      await addToCart(id);
+      await deleteItem(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeItem = async (id) => {
+    setIsBusy(true);
+    try {
+      await deleteItem(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="mt-auto d-flex flex-column gap-2">
+      <button
+        className="btn btn-warning btn-sm fw-semibold"
+        onClick={() => moveToCart(item._id)}
+        disabled={isBusy}
+      >
+        Move to Cart
+      </button>
+      <button
+        className="btn btn-outline-secondary btn-sm"
+        onClick={() => removeItem(item._id)}
+        disabled={isBusy}
+      >
+        <i className="bi bi-heart-fill text-danger me-1"></i>
+        Remove
+      </button>
+    </div>
+  );
+};
 
 export const Wishlist = () => {
   const { data, loading, error, deleteItem } = useWishlist();
@@ -15,11 +67,6 @@ export const Wishlist = () => {
 
   const wishlist = data?.data?.wishlist?.[0];
   const items = wishlist?.items ?? [];
-
-  const moveToCart = async (id) => {
-    await addToCart(id);
-    await deleteItem(id);
-  };
 
   if (loading) return <Loading />;
   if (error) return <Error />;
@@ -89,22 +136,12 @@ export const Wishlist = () => {
                         {item.discount}% off
                       </span>
                     </div>
-
-                    <div className="mt-auto d-flex flex-column gap-2">
-                      <button
-                        className="btn btn-warning btn-sm fw-semibold"
-                        onClick={() => moveToCart(item._id)}
-                      >
-                        Move to Cart
-                      </button>
-                      <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => deleteItem(item._id)}
-                      >
-                        <i className="bi bi-heart-fill text-danger me-1"></i>
-                        Remove
-                      </button>
-                    </div>
+                    <Buttons
+                      addToCart={addToCart}
+                      deleteItem={deleteItem}
+                      item={item}
+                      loading={loading}
+                    />
                   </div>
                 </div>
               </div>

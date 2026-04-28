@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAddress } from "../contexts/AddressContext";
 import { AddressUpdateForm } from "./AddressUpdateForm";
 import { API_BASE_URL } from "../constants";
@@ -6,10 +6,26 @@ import { API_BASE_URL } from "../constants";
 export const AddressCard = ({ address }) => {
   const [edit, setEdit] = useState(false);
 
-  const { selectedAddressId, setSelectedAddressId, setRefresh } = useAddress();
+  const {
+    selectedAddressId,
+    setSelectedAddressId,
+    setRefresh,
+    addressLoading,
+  } = useAddress();
+
+  const [isBusy, setIsBusy] = useState(false);
+  const trackState = useRef([]);
+
+  if (trackState.current.length === 0 && isBusy && addressLoading)
+    trackState.current.push(1);
+  if (trackState.current.length === 1 && isBusy && !addressLoading) {
+    setIsBusy(false);
+    trackState.current = [];
+  }
 
   const deleteAddress = async (_id) => {
     try {
+      setIsBusy(true);
       const res = await fetch(`${API_BASE_URL}/address/${_id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -25,6 +41,8 @@ export const AddressCard = ({ address }) => {
   if (edit) {
     return (
       <AddressUpdateForm
+        isBusy={isBusy}
+        setIsBusy={setIsBusy}
         presentAddress={address}
         onSuccess={() => {
           setEdit(false);
@@ -65,31 +83,38 @@ export const AddressCard = ({ address }) => {
           </div>
 
           <div>
-            <div className="d-flex align-items-center gap-2 mb-1">
-              <p className="fw-semibold mb-0" style={{ fontSize: "14px" }}>
-                {address?.name}
-              </p>
-              <span
-                className="badge bg-warning text-dark"
-                style={{ fontSize: "10px" }}
-              >
-                {address?.type}
-              </span>
-            </div>
-            <p className="text-muted mb-1" style={{ fontSize: "13px" }}>
-              {address?.addressLine}
-            </p>
-            <p className="text-muted mb-1" style={{ fontSize: "13px" }}>
-              {address?.city}, {address?.state} — {address?.pincode}
-            </p>
-            <p className="text-muted mb-0" style={{ fontSize: "13px" }}>
-              Phone: {address?.phone}
-            </p>
+            {isBusy ? (
+              <span className="spinner-border spinner-border-sm me-2" />
+            ) : (
+              <>
+                <div className="d-flex align-items-center gap-2 mb-1">
+                  <p className="fw-semibold mb-0" style={{ fontSize: "14px" }}>
+                    {address?.name}
+                  </p>
+                  <span
+                    className="badge bg-warning text-dark"
+                    style={{ fontSize: "10px" }}
+                  >
+                    {address?.type}
+                  </span>
+                </div>
+                <p className="text-muted mb-1" style={{ fontSize: "13px" }}>
+                  {address?.addressLine}
+                </p>
+                <p className="text-muted mb-1" style={{ fontSize: "13px" }}>
+                  {address?.city}, {address?.state} — {address?.pincode}
+                </p>
+                <p className="text-muted mb-0" style={{ fontSize: "13px" }}>
+                  Phone: {address?.phone}
+                </p>
+              </>
+            )}
             <div className="d-flex align-items-center gap-2 my-1">
               <button
                 className="btn btn-warning btn-sm fw-semibold"
                 style={{ fontSize: "13px" }}
                 onClick={() => setEdit(true)}
+                disabled={isBusy}
               >
                 <i className="bi bi-pencil"></i>
               </button>
@@ -97,6 +122,7 @@ export const AddressCard = ({ address }) => {
                 className="btn btn-outline-secondary btn-sm"
                 style={{ fontSize: "13px", zIndex: "100" }}
                 onClick={() => deleteAddress(address?._id)}
+                disabled={isBusy}
               >
                 <i className="bi bi-trash3"></i>
               </button>

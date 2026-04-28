@@ -1,21 +1,23 @@
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL, ROUTES } from "../constants";
 import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { Navbar } from "../components/NavBar";
-import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { useWishlist } from "../contexts/WishlistContext";
 import { useAddress } from "../contexts/AddressContext";
 import { AddressCard } from "../components/AddressCard";
 import { postData } from "../utils/postData";
 import { ToastAlert } from "../components/ToastAlert";
+import { CheckoutBtn } from "../components/CheckoutBtn";
+import { CartItemCard } from "../components/CartItemCard";
 
 export const Cart = () => {
   const navigate = useNavigate();
   const {
     cart,
-    cartId,
     items,
     loading,
     error,
@@ -29,11 +31,6 @@ export const Cart = () => {
   const addresses = addressData?.data?.addresses ?? [];
   const selectedAddress = addresses.find(({ _id }) => selectedAddressId == _id);
 
-  const moveToWishlist = async (id) => {
-    await addItem(id);
-    await removeItem(id);
-  };
-
   const subtotal = items.reduce(
     (acc, { product, quantity }) => acc + product.price * quantity,
     0,
@@ -45,36 +42,6 @@ export const Cart = () => {
   );
   const deliveryCharge = subtotal > 999 ? 0 : 499;
   const total = subtotal + deliveryCharge;
-
-  const placeOrder = (items) => {
-    const orderItems = items.map(({ product, quantity }) => ({
-      productId: product._id,
-      quantity: quantity,
-    }));
-
-    const { name, phone, pincode, city, state, addressLine, type } =
-      selectedAddress;
-
-    const orderAddress = {
-      name: name,
-      phone: phone,
-      pincode: pincode,
-      city: city,
-      state: state,
-      addressLine: addressLine,
-      type: type,
-    };
-
-    const body = { items: orderItems, address: orderAddress };
-    (async () => {
-      const { data, error } = await postData(`${API_BASE_URL}/orders`, body);
-      if (error) return console.log("Error occoured placing order : ", error);
-      if (data.success === true) {
-        await emptyCart();
-        navigate(ROUTES.ORDER_SUMMARY(data.data.order._id));
-      }
-    })();
-  };
 
   if (loading) return <Loading />;
   if (error) return <Error />;
@@ -101,84 +68,11 @@ export const Cart = () => {
             <div className="col-12 col-lg-8">
               <div className="d-flex flex-column gap-3">
                 {items.map(({ product, quantity, _id }) => (
-                  <div className="card border shadow-sm p-3" key={_id}>
-                    <div className="d-flex flex-column flex-sm-row gap-3">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        style={{
-                          width: "120px",
-                          height: "120px",
-                          objectFit: "contain",
-                          background: "#f8f8f8",
-                          borderRadius: "8px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() =>
-                          navigate(ROUTES.PRODUCT_DETAIL(product._id))
-                        }
-                      />
-
-                      <div className="flex-grow-1">
-                        <p
-                          className="fw-semibold mb-1"
-                          style={{ fontSize: "14px", cursor: "pointer" }}
-                          onClick={() =>
-                            navigate(ROUTES.PRODUCT_DETAIL(product._id))
-                          }
-                        >
-                          {product.name}
-                        </p>
-
-                        <div className="d-flex align-items-center gap-2 mb-2">
-                          <span className="fw-bold">₹{product.price}</span>
-                          <span
-                            className="text-muted text-decoration-line-through"
-                            style={{ fontSize: "13px" }}
-                          >
-                            ₹{product.originalPrice}
-                          </span>
-                          <span
-                            className="text-success"
-                            style={{ fontSize: "13px" }}
-                          >
-                            {product.discount}% off
-                          </span>
-                        </div>
-
-                        <div className="d-flex align-items-center gap-2 mb-3">
-                          <button
-                            className="btn btn-outline-secondary btn-sm px-2 py-0"
-                            onClick={() => quantity > 1 && decQty(product._id)}
-                          >
-                            −
-                          </button>
-                          <span className="fw-semibold">{quantity}</span>
-                          <button
-                            className="btn btn-outline-secondary btn-sm px-2 py-0"
-                            onClick={() => addToCart(product._id)}
-                          >
-                            +
-                          </button>
-                        </div>
-
-                        <div className="d-flex gap-2">
-                          <button
-                            className="btn btn-outline-secondary btn-sm"
-                            onClick={() => removeItem(product._id)}
-                          >
-                            Remove
-                          </button>
-                          <button
-                            className="btn btn-outline-warning btn-sm"
-                            onClick={() => moveToWishlist(product._id)}
-                          >
-                            Move to Wishlist
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <CartItemCard
+                    product={product}
+                    quantity={quantity}
+                    key={_id}
+                  />
                 ))}
               </div>
             </div>
@@ -243,12 +137,12 @@ export const Cart = () => {
                 <p className="text-success mb-4" style={{ fontSize: "13px" }}>
                   You will save ₹{totalDiscount} on this order
                 </p>
-                <button
-                  className="btn btn-warning fw-semibold w-100"
-                  onClick={() => placeOrder(items)}
-                >
-                  Check Out
-                </button>
+                <CheckoutBtn
+                  items={items}
+                  loading={loading}
+                  selectedAddress={selectedAddress}
+                  emptyCart={emptyCart}
+                />
               </div>
             </div>
           </div>

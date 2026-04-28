@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { API_BASE_URL } from "../constants";
+import { useAddress } from "../contexts/AddressContext";
 
 export const AddressUpdateForm = ({
   presentAddress,
   onSuccess,
   cancelEdit,
+  isBusy,
+  setIsBusy,
 }) => {
   const { _id, name, type, addressLine, city, state, pincode, phone } =
     presentAddress;
-
   const [form, setForm] = useState({
     name: name,
     phone: phone,
@@ -18,6 +20,16 @@ export const AddressUpdateForm = ({
     addressLine: addressLine,
     type: type,
   });
+  const { addressLoading } = useAddress();
+
+  const trackState = useRef([]);
+
+  if (trackState.current.length === 0 && isBusy && addressLoading)
+    trackState.current.push(1);
+  if (trackState.current.length === 1 && isBusy && !addressLoading) {
+    setIsBusy(false);
+    trackState.current = [];
+  }
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -26,6 +38,7 @@ export const AddressUpdateForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsBusy(true);
       const res = await fetch(`${API_BASE_URL}/address/${_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -117,7 +130,11 @@ export const AddressUpdateForm = ({
         </div>
 
         <div className="d-flex align-items-center justify-content-between">
-          <button className="btn btn-warning btn-sm fw-semibold" type="submit">
+          <button
+            className="btn btn-warning btn-sm fw-semibold"
+            type="submit"
+            disabled={isBusy}
+          >
             Save Address
           </button>
           <button
