@@ -1,20 +1,27 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useRef, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL } from "../constants/index";
 import { putData } from "../utils/putData";
 import { postData } from "../utils/postData";
 import { useToastAlert } from "./ToastAlertContext";
+
 const CartContext = createContext();
 const getCartUrl = `${API_BASE_URL}/cart`;
 
 export const CartProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false);
   const { data, loading, error } = useFetch(getCartUrl, refresh);
-  const cart = data?.data?.cart?.[0]; // first cart doc
-  const cartId = cart?._id; // needed for update/delete calls later
+  const cart = data?.data?.cart?.[0];
+  const cartId = cart?._id;
   const items = cart?.items ?? [];
 
   const { addAlert } = useToastAlert();
+
+  const itemsRef = useRef(items);
+
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
 
   const itemMap = new Map();
   if (items.length > 0) {
@@ -23,9 +30,24 @@ export const CartProvider = ({ children }) => {
     });
   }
 
+  const toRefFormat = (list) =>
+    list.map((item) => ({
+      product: { _id: item.product },
+      quantity: item.quantity,
+    }));
+
+  const toRequestFormat = (list) =>
+    list.map(({ product, quantity }) => ({
+      product: product._id,
+      quantity,
+    }));
+
   const addToCart = async (id) => {
+    const currentItems = itemsRef.current;
+    const previousItems = currentItems;
+
     let found = false;
-    const newItemList = items.map(({ product, quantity }) => {
+    const newItemList = currentItems.map(({ product, quantity }) => {
       const temp = {
         product: product._id,
         quantity: quantity,
@@ -40,6 +62,8 @@ export const CartProvider = ({ children }) => {
 
     if (!found) newItemList.push({ product: id, quantity: 1 });
 
+    itemsRef.current = toRefFormat(newItemList);
+
     const body = {
       items: newItemList,
     };
@@ -48,19 +72,29 @@ export const CartProvider = ({ children }) => {
 
     try {
       const { data, error } = await putData(updateCartUrl, body);
-      if (error) return console.log("error updating cart : ", error);
+      if (error) {
+        itemsRef.current = previousItems;
+        return console.log("error updating cart : ", error);
+      }
 
       if (data.success == true) {
         setRefresh((prev) => !prev);
         addAlert("Item added", "Cart");
-      } else console.log("Error updating cart : ", data.message);
+      } else {
+        itemsRef.current = previousItems;
+        console.log("Error updating cart : ", data.message);
+      }
     } catch (error) {
+      itemsRef.current = previousItems;
       console.log("Error: ", error);
     }
   };
 
   const decQty = async (id) => {
-    const newItemList = items.map(({ product, quantity }) => {
+    const currentItems = itemsRef.current;
+    const previousItems = currentItems;
+
+    const newItemList = currentItems.map(({ product, quantity }) => {
       const temp = {
         product: product._id,
         quantity: quantity,
@@ -70,6 +104,9 @@ export const CartProvider = ({ children }) => {
       }
       return temp;
     });
+
+    itemsRef.current = toRefFormat(newItemList);
+
     const body = {
       items: newItemList,
     };
@@ -78,51 +115,80 @@ export const CartProvider = ({ children }) => {
 
     try {
       const { data, error } = await putData(updateCartUrl, body);
-      if (error) return console.log("error updating cart : ", error);
+      if (error) {
+        itemsRef.current = previousItems;
+        return console.log("error updating cart : ", error);
+      }
       if (data.success == true) {
         setRefresh((prev) => !prev);
         addAlert("An item removed", "Cart");
-      } else console.log("Error updating cart : ", data.message);
+      } else {
+        itemsRef.current = previousItems;
+        console.log("Error updating cart : ", data.message);
+      }
     } catch (error) {
+      itemsRef.current = previousItems;
       console.log("Error: ", error);
     }
   };
 
   const removeItem = async (id) => {
-    const newItemList = items.map(({ product, quantity }) => {
-      const temp = {
-        product: product._id,
-        quantity: quantity,
-      };
-      return temp;
-    });
+    const currentItems = itemsRef.current;
+    const previousItems = currentItems;
+
+    const newItemList = toRequestFormat(currentItems).filter(
+      ({ product }) => id != product,
+    );
+
+    itemsRef.current = toRefFormat(newItemList);
 
     const body = {
-      items: newItemList.filter(({ product }) => id != product),
+      items: newItemList,
     };
+
     const updateCartUrl = `${API_BASE_URL}/cart/${cartId}`;
+
     try {
       const { data, error } = await putData(updateCartUrl, body);
-      if (error) return console.log("error updating cart : ", error);
+      if (error) {
+        itemsRef.current = previousItems;
+        return console.log("error updating cart : ", error);
+      }
       if (data.success == true) {
         setRefresh((prev) => !prev);
         addAlert("Item removed", "Cart");
-      } else console.log("Error updating cart : ", data.message);
+      } else {
+        itemsRef.current = previousItems;
+        console.log("Error updating cart : ", data.message);
+      }
     } catch (error) {
+      itemsRef.current = previousItems;
       console.log("Error: ", error);
     }
   };
 
   const emptyCart = async () => {
+    const previousItems = itemsRef.current;
+    itemsRef.current = [];
+
     const putCartUrl = `${API_BASE_URL}/cart/${cartId}`;
     const body = {
       items: [],
     };
     try {
       const { data, error } = await putData(putCartUrl, body);
-      if (error) return console.log("Error emptying Cart : ", error);
-      if (data.success === true) setRefresh((prev) => !prev);
+      if (error) {
+        itemsRef.current = previousItems;
+        return console.log("Error emptying Cart : ", error);
+      }
+      if (data.success === true) {
+        setRefresh((prev) => !prev);
+      } else {
+        itemsRef.current = previousItems;
+        console.log("Error emptying cart : ", data.message);
+      }
     } catch (error) {
+      itemsRef.current = previousItems;
       console.log("Error: ", error);
     }
   };
