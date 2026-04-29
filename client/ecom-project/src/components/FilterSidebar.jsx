@@ -1,11 +1,15 @@
-// components/FilterSidebar.jsx
-
 const FilterSidebar = ({
   categories,
   filters,
   onFilterChange,
   onClearFilters,
+  clearSearchParam,
 }) => {
+  const showAllProducts = () => {
+    clearSearchParam();
+    onFilterChange("category", "All");
+  };
+
   return (
     <div className="p-3 border rounded-3">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -31,7 +35,7 @@ const FilterSidebar = ({
             type="checkbox"
             id="All"
             checked={filters.categories.includes("All")}
-            onChange={() => onFilterChange("category", "All")}
+            onChange={() => showAllProducts()}
           />
           <label
             className="form-check-label"
