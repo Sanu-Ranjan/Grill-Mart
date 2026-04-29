@@ -10,7 +10,6 @@ import { useWishlist } from "../contexts/WishlistContext";
 import { useAddress } from "../contexts/AddressContext";
 import { AddressCard } from "../components/AddressCard";
 import { postData } from "../utils/postData";
-import { ToastAlert } from "../components/ToastAlert";
 import { CheckoutBtn } from "../components/CheckoutBtn";
 import { CartItemCard } from "../components/CartItemCard";
 
@@ -49,7 +48,6 @@ export const Cart = () => {
   return (
     <>
       <Navbar />
-      <ToastAlert />
       <div className="container py-4">
         <h4 className="fw-bold mb-4">My Cart ({items.length})</h4>
 

@@ -13,8 +13,6 @@ import { WishListButton } from "../components/WishlistButton";
 import { useAddress } from "../contexts/AddressContext";
 import { useCart } from "../contexts/CartContext";
 import { postData } from "../utils/postData";
-import { ToastAlert } from "../components/ToastAlert";
-import { useToastAlert } from "../contexts/ToastAlertContext";
 
 export const ProductDetails = () => {
   const { id } = useParams();
@@ -84,7 +82,6 @@ export const ProductDetails = () => {
   return (
     <>
       <Navbar />
-      <ToastAlert />
       <div className="container py-4">
         <div className="row g-4">
           <div className="col-12 col-md-5">
