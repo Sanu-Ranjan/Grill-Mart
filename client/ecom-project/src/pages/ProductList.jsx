@@ -86,6 +86,7 @@ export const ProductList = () => {
   if (loading) return <Loading />;
   if (error) return <Error />;
 
+  const itemsCount = filteredProducts?.length ?? 0;
   return (
     <>
       <Navbar />
@@ -103,9 +104,16 @@ export const ProductList = () => {
           </div>
 
           <div className="col-12 col-md-9">
-            <p className="text-muted mb-3" style={{ fontSize: "14px" }}>
-              Showing {filteredProducts?.length ?? 0} products
-            </p>
+            {itemsCount > 0 ? (
+              <p className="text-muted mb-3" style={{ fontSize: "14px" }}>
+                Showing {itemsCount} products
+              </p>
+            ) : (
+              <p className="text-center mb-3 " style={{ fontSize: "14px" }}>
+                No Products Found
+              </p>
+            )}
+
             <div className="row g-3">
               {filteredProducts?.map((product) => (
                 <div className="col-12 col-sm-6 col-lg-4" key={product._id}>
