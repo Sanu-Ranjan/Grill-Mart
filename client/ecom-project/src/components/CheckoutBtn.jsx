@@ -2,12 +2,19 @@ import { useRef, useState } from "react";
 import { postData } from "../utils/postData";
 import { useNavigate } from "react-router-dom";
 import { useToastAlert } from "../contexts/ToastAlertContext";
+import { useCart } from "../contexts/CartContext";
+import { useAddress } from "../contexts/AddressContext";
 
-export const CheckoutBtn = ({ items, loading, selectedAddress, emptyCart }) => {
+export const CheckoutBtn = () => {
   const [isBusy, setIsBusy] = useState(false);
   const trackState = useRef([]);
   const navigate = useNavigate();
   const { addAlert } = useToastAlert();
+  const { items, loading, emptyCart } = useCart();
+
+  const { addressData, selectedAddressId } = useAddress();
+  const addresses = addressData?.data?.addresses ?? [];
+  const selectedAddress = addresses.find(({ _id }) => selectedAddressId == _id);
 
   if (trackState.current.length === 0 && isBusy && loading)
     trackState.current.push(1);
