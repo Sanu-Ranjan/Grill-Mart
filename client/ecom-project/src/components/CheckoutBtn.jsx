@@ -1,12 +1,14 @@
 import { useRef, useState } from "react";
 import { postData } from "../utils/postData";
 import { useNavigate } from "react-router-dom";
+import { useToastAlert } from "../contexts/ToastAlertContext";
 import { API_BASE_URL, ROUTES } from "../constants";
 
 export const CheckoutBtn = ({ items, loading, selectedAddress, emptyCart }) => {
   const [isBusy, setIsBusy] = useState(false);
   const trackState = useRef([]);
   const navigate = useNavigate();
+  const { addAlert } = useToastAlert();
 
   if (trackState.current.length === 0 && isBusy && loading)
     trackState.current.push(1);
@@ -20,6 +22,9 @@ export const CheckoutBtn = ({ items, loading, selectedAddress, emptyCart }) => {
       productId: product._id,
       quantity: quantity,
     }));
+
+    if (!selectedAddress)
+      return addAlert("Please Select an address first", "Action needed");
 
     const { name, phone, pincode, city, state, addressLine, type } =
       selectedAddress;
