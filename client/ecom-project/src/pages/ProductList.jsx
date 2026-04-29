@@ -98,6 +98,7 @@ export const ProductList = () => {
               filters={filters}
               onFilterChange={onFilterChange}
               onClearFilters={onClearFilters}
+              clearSearchParam={() => setSearchParams({})}
             />
           </div>
 
