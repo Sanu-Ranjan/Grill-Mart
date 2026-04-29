@@ -16,6 +16,9 @@ export const CartProvider = ({ children }) => {
   const items = cart?.items ?? [];
   const itemsRef = useRef(items);
 
+  const totalQuantity =
+    items?.reduce((acc, { quantity }) => acc + quantity, 0) ?? 0;
+
   useEffect(() => {
     itemsRef.current = items;
   }, [items]);
@@ -190,7 +193,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const buyNow = () => {};
+  console.log("items:", items);
 
   return (
     <CartContext.Provider
@@ -201,6 +204,7 @@ export const CartProvider = ({ children }) => {
         loading,
         error,
         itemMap,
+        totalQuantity,
         addToCart,
         decQty,
         removeItem,
