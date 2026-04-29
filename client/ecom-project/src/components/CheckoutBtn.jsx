@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { postData } from "../utils/postData";
 import { useNavigate } from "react-router-dom";
-import { useToastAlert } from "../contexts/ToastAlertContext";
+import { toast } from "react-toastify";
 import { useCart } from "../contexts/CartContext";
 import { useAddress } from "../contexts/AddressContext";
 
@@ -9,7 +9,7 @@ export const CheckoutBtn = () => {
   const [isBusy, setIsBusy] = useState(false);
   const trackState = useRef([]);
   const navigate = useNavigate();
-  const { addAlert } = useToastAlert();
+
   const { items, loading, emptyCart } = useCart();
 
   const { addressData, selectedAddressId } = useAddress();
@@ -29,8 +29,7 @@ export const CheckoutBtn = () => {
       quantity: quantity,
     }));
 
-    if (!selectedAddress)
-      return addAlert("Please Select an address first", "Action needed");
+    if (!selectedAddress) return toast("Please Select an address first");
 
     const { name, phone, pincode, city, state, addressLine, type } =
       selectedAddress;

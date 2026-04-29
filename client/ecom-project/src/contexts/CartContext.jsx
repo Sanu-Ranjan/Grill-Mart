@@ -76,7 +76,7 @@ export const CartProvider = ({ children }) => {
 
       if (data.success == true) {
         setRefresh((prev) => !prev);
-        toast("Item quantity added");
+        toast("Item added to cart");
       } else {
         itemsRef.current = previousItems;
         console.log("Error updating cart : ", data.message);
@@ -118,7 +118,7 @@ export const CartProvider = ({ children }) => {
       }
       if (data.success == true) {
         setRefresh((prev) => !prev);
-        toast("Item quantity decresed");
+        toast("Item removed from cart");
       } else {
         itemsRef.current = previousItems;
         console.log("Error updating cart : ", data.message);
@@ -153,7 +153,7 @@ export const CartProvider = ({ children }) => {
       }
       if (data.success == true) {
         setRefresh((prev) => !prev);
-        toast("Item removed from Cart");
+        toast("Item deleted from Cart");
       } else {
         itemsRef.current = previousItems;
         console.log("Error updating cart : ", data.message);
