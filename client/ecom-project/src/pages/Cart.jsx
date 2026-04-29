@@ -43,7 +43,7 @@ export const Cart = () => {
   const deliveryCharge = subtotal > 999 ? 0 : 499;
   const total = subtotal + deliveryCharge;
 
-  if (loading) return <Loading />;
+  if (loading && !cart) return <Loading />;
   if (error) return <Error />;
 
   return (
