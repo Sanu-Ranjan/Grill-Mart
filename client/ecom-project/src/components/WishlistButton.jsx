@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { useWishlist } from "../contexts/WishlistContext";
-import { ToastAlert } from "./ToastAlert";
 
 export const WishListButton = ({ product, text }) => {
   const { wishlistSet, deleteItem, addItem, loading } = useWishlist();

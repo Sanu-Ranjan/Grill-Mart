@@ -3,7 +3,7 @@ import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL } from "../constants/index";
 import { putData } from "../utils/putData";
 import { postData } from "../utils/postData";
-import { useToastAlert } from "./ToastAlertContext";
+import { toast } from "react-toastify";
 
 const CartContext = createContext();
 const getCartUrl = `${API_BASE_URL}/cart`;
@@ -14,10 +14,10 @@ export const CartProvider = ({ children }) => {
   const cart = data?.data?.cart?.[0];
   const cartId = cart?._id;
   const items = cart?.items ?? [];
-
-  const { addAlert } = useToastAlert();
-
   const itemsRef = useRef(items);
+
+  const totalQuantity =
+    items?.reduce((acc, { quantity }) => acc + quantity, 0) ?? 0;
 
   useEffect(() => {
     itemsRef.current = items;
@@ -79,7 +79,7 @@ export const CartProvider = ({ children }) => {
 
       if (data.success == true) {
         setRefresh((prev) => !prev);
-        addAlert("Item added", "Cart");
+        toast("Item added to cart");
       } else {
         itemsRef.current = previousItems;
         console.log("Error updating cart : ", data.message);
@@ -121,7 +121,7 @@ export const CartProvider = ({ children }) => {
       }
       if (data.success == true) {
         setRefresh((prev) => !prev);
-        addAlert("An item removed", "Cart");
+        toast("Item removed from cart");
       } else {
         itemsRef.current = previousItems;
         console.log("Error updating cart : ", data.message);
@@ -156,7 +156,7 @@ export const CartProvider = ({ children }) => {
       }
       if (data.success == true) {
         setRefresh((prev) => !prev);
-        addAlert("Item removed", "Cart");
+        toast("Item deleted from Cart");
       } else {
         itemsRef.current = previousItems;
         console.log("Error updating cart : ", data.message);
@@ -193,7 +193,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const buyNow = () => {};
+  console.log("items:", items);
 
   return (
     <CartContext.Provider
@@ -204,6 +204,7 @@ export const CartProvider = ({ children }) => {
         loading,
         error,
         itemMap,
+        totalQuantity,
         addToCart,
         decQty,
         removeItem,
