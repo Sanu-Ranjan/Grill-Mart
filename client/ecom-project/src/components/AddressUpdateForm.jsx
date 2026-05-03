@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { API_BASE_URL } from "../constants";
 import { useAddress } from "../contexts/AddressContext";
 import { useBusyState } from "../hooks/useBusyState";
+import { validateForm } from "../utils/validateForm";
+import { toast } from "react-toastify";
 
 export const AddressUpdateForm = ({
   presentAddress,
@@ -31,6 +33,13 @@ export const AddressUpdateForm = ({
     e.preventDefault();
     try {
       setIsBusy(true);
+
+      const { isValid, message } = validateForm(form);
+      if (!isValid) {
+        setIsBusy(false);
+        return toast(message);
+      }
+
       const res = await fetch(`${API_BASE_URL}/address/${_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
