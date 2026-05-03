@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useCart } from "../contexts/CartContext";
 import { useAddress } from "../contexts/AddressContext";
-import { API_BASE_URL, ROUTES } from "../constants";
+import { API_BASE_URL, ROUTES, API_ROUTES } from "../constants";
 import { useBusyState } from "../hooks/useBusyState";
 
 export const CheckoutBtn = () => {
@@ -41,7 +41,10 @@ export const CheckoutBtn = () => {
     const body = { items: orderItems, address: orderAddress };
     (async () => {
       setIsBusy(true);
-      const { data, error } = await postData(`${API_BASE_URL}/orders`, body);
+      const { data, error } = await postData(
+        `${API_BASE_URL}${API_ROUTES.orders.add}`,
+        body,
+      );
       if (error) return console.log("Error occoured placing order : ", error);
       if (data.success === true) {
         await emptyCart();

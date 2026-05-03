@@ -2,7 +2,7 @@ import { Navbar } from "../components/NavBar";
 import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { useFetch } from "../hooks/useFetch";
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL, API_ROUTES } from "../constants";
 import { ProductCard } from "../components/ProductCard";
 import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
@@ -19,10 +19,14 @@ export const ProductList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryId = searchParams.get("category");
 
-  const { data, loading, error } = useFetch(`${API_BASE_URL}/products`);
+  const { data, loading, error } = useFetch(
+    `${API_BASE_URL}${API_ROUTES.products.getAll}`,
+  );
   const products = data?.data?.products;
 
-  const { data: categoryData } = useFetch(`${API_BASE_URL}/categories`);
+  const { data: categoryData } = useFetch(
+    `${API_BASE_URL}${API_ROUTES.category.getAll}`,
+  );
   const categories = categoryData?.data?.categories;
 
   const onFilterChange = (type, value) => {

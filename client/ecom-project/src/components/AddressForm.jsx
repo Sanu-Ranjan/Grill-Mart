@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL, API_ROUTES } from "../constants";
 import { useAddress } from "../contexts/AddressContext";
 import { useBusyState } from "../hooks/useBusyState";
 import { validateForm } from "../utils/validateForm";
@@ -33,7 +33,7 @@ export const AddressForm = ({ onSuccess }) => {
         return toast(message);
       }
 
-      const res = await fetch(`${API_BASE_URL}/address`, {
+      const res = await fetch(`${API_BASE_URL}${API_ROUTES.address.add}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

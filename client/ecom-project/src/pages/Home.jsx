@@ -2,13 +2,13 @@ import { CategoryCard } from "../components/CategoryCard";
 import { Error } from "../components/Error";
 import { Loading } from "../components/Loading";
 import { Navbar } from "../components/NavBar";
-import { API_BASE_URL } from "../constants/index";
+import { API_BASE_URL, API_ROUTES, ROUTES } from "../constants/index";
 import { useFetch } from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { data, loading, error } = useFetch(
-    `${API_BASE_URL}/categories/featured`,
+    `${API_BASE_URL}${API_ROUTES.category.getFeatured}`,
   );
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ const Home = () => {
             </p>
             <button
               className="btn btn-warning fw-semibold px-4"
-              onClick={() => navigate("/products")}
+              onClick={() => navigate(ROUTES.PRODUCTS)}
             >
               Shop Now
             </button>

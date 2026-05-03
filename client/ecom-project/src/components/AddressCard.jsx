@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useAddress } from "../contexts/AddressContext";
 import { AddressUpdateForm } from "./AddressUpdateForm";
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL, API_ROUTES } from "../constants";
 import { useBusyState } from "../hooks/useBusyState";
 
 export const AddressCard = ({ address }) => {
@@ -19,10 +19,13 @@ export const AddressCard = ({ address }) => {
   const deleteAddress = async (_id) => {
     try {
       setIsBusy(true);
-      const res = await fetch(`${API_BASE_URL}/address/${_id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await fetch(
+        `${API_BASE_URL}${API_ROUTES.address.delete(_id)}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
       const data = await res.json();
       if (data.success) setRefresh((prev) => !prev);
       else console.log(data.message);

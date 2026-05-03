@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { API_BASE_URL, ROUTES } from "../constants";
+import { API_BASE_URL, ROUTES, API_ROUTES } from "../constants";
 import { useFetch } from "../hooks/useFetch";
 import { Navbar } from "../components/NavBar";
 import { Loading } from "../components/Loading";
@@ -18,7 +18,9 @@ export const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { data, loading, error } = useFetch(`${API_BASE_URL}/products/${id}`); //fetch products
+  const { data, loading, error } = useFetch(
+    `${API_BASE_URL}${API_ROUTES.products.getById(id)}`,
+  ); //fetch products
   const product = data?.data?.product;
 
   const [quantity, setQuantity] = useState(0);
@@ -34,7 +36,7 @@ export const ProductDetails = () => {
     const fetchCategories = async () => {
       const results = await Promise.all(
         product.category.map((categoryId) =>
-          fetch(`${API_BASE_URL}/categories/${categoryId}`)
+          fetch(`${API_BASE_URL}${API_ROUTES.category.getById(categoryId)}`)
             .then((res) => res.json())
             .then((data) => data?.data?.category),
         ),
@@ -68,7 +70,10 @@ export const ProductDetails = () => {
 
     const body = { items: orderItems, address: orderAddress };
     (async () => {
-      const { data, error } = await postData(`${API_BASE_URL}/orders`, body);
+      const { data, error } = await postData(
+        `${API_BASE_URL}${API_ROUTES.orders.add}`,
+        body,
+      );
       if (error) return console.log("Error occoured placing order : ", error);
       if (data.success === true) {
         navigate(ROUTES.ORDER_SUMMARY(data.data.order._id));

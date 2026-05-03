@@ -1,12 +1,12 @@
 import { createContext, useContext, useState } from "react";
-import { API_BASE_URL } from "../constants/index";
+import { API_BASE_URL, API_ROUTES } from "../constants/index";
 import { useFetch } from "../hooks/useFetch";
 const AddressContext = createContext();
 
 export const AddressProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false);
   const { data: addressData = null, loading: addressLoading } = useFetch(
-    `${API_BASE_URL}/address`,
+    `${API_BASE_URL}${API_ROUTES.address.getAll}`,
     refresh,
   );
   const addressId = JSON.parse(localStorage.getItem("addressId"));

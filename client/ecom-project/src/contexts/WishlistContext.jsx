@@ -1,21 +1,20 @@
 import { createContext, useContext, useState } from "react";
 import { useFetch } from "../hooks/useFetch";
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL, API_ROUTES } from "../constants";
 import { postData } from "../utils/postData";
 import { deleteData } from "../utils/deleteData";
 import { toast } from "react-toastify";
 
-const posturl = `${API_BASE_URL}/wishlist/item`;
-const deleteUrl = `${API_BASE_URL}/wishlist`;
+const posturl = `${API_BASE_URL}${API_ROUTES.wishlist.addItem}`;
+const deleteUrl = `${API_BASE_URL}${API_ROUTES.wishlist.deleteItem}`;
+const getWishlistUrl = `${API_BASE_URL}${API_ROUTES.wishlist.get}`;
+
 const WishListContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false);
 
-  const { data, loading, error } = useFetch(
-    `${API_BASE_URL}/wishlist`,
-    refresh,
-  );
+  const { data, loading, error } = useFetch(getWishlistUrl, refresh);
 
   const wishlist = data?.data?.wishlist?.[0];
   const addItem = async (productId) => {

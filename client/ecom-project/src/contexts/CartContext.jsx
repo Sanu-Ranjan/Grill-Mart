@@ -1,12 +1,14 @@
 import { createContext, useContext, useState, useRef, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
-import { API_BASE_URL } from "../constants/index";
+import { API_BASE_URL, API_ROUTES } from "../constants/index";
 import { putData } from "../utils/putData";
 import { postData } from "../utils/postData";
 import { toast } from "react-toastify";
 
 const CartContext = createContext();
-const getCartUrl = `${API_BASE_URL}/cart`;
+
+const getCartUrl = `${API_BASE_URL}${API_ROUTES.cart.get}`;
+const updateCartUrl = (id) => `${API_BASE_URL}${API_ROUTES.cart.update(id)}`;
 
 export const CartProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false);
@@ -68,10 +70,8 @@ export const CartProvider = ({ children }) => {
       items: newItemList,
     };
 
-    const updateCartUrl = `${API_BASE_URL}/cart/${cartId}`;
-
     try {
-      const { data, error } = await putData(updateCartUrl, body);
+      const { data, error } = await putData(updateCartUrl(cartId), body);
       if (error) {
         itemsRef.current = previousItems;
         return console.log("error updating cart : ", error);
@@ -111,10 +111,8 @@ export const CartProvider = ({ children }) => {
       items: newItemList,
     };
 
-    const updateCartUrl = `${API_BASE_URL}/cart/${cartId}`;
-
     try {
-      const { data, error } = await putData(updateCartUrl, body);
+      const { data, error } = await putData(updateCartUrl(cartId), body);
       if (error) {
         itemsRef.current = previousItems;
         return console.log("error updating cart : ", error);
@@ -146,10 +144,8 @@ export const CartProvider = ({ children }) => {
       items: newItemList,
     };
 
-    const updateCartUrl = `${API_BASE_URL}/cart/${cartId}`;
-
     try {
-      const { data, error } = await putData(updateCartUrl, body);
+      const { data, error } = await putData(updateCartUrl(cartId), body);
       if (error) {
         itemsRef.current = previousItems;
         return console.log("error updating cart : ", error);
@@ -171,12 +167,11 @@ export const CartProvider = ({ children }) => {
     const previousItems = itemsRef.current;
     itemsRef.current = [];
 
-    const putCartUrl = `${API_BASE_URL}/cart/${cartId}`;
     const body = {
       items: [],
     };
     try {
-      const { data, error } = await putData(putCartUrl, body);
+      const { data, error } = await putData(updateCartUrl(cartId), body);
       if (error) {
         itemsRef.current = previousItems;
         return console.log("Error emptying Cart : ", error);

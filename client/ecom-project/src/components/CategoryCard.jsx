@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../constants";
 export const CategoryCard = ({ category }) => {
   const navigate = useNavigate();
   return (
@@ -6,7 +7,7 @@ export const CategoryCard = ({ category }) => {
       <div
         className="card border-0 rounded-3 overflow-hidden shadow-sm"
         style={{ cursor: "pointer" }}
-        onClick={() => navigate(`/products?category=${category._id}`)}
+        onClick={() => navigate(`${ROUTES.PRODUCTS}?category=${category._id}`)}
       >
         <img
           src={category.image}

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { API_BASE_URL, ROUTES } from "../constants";
+import { API_BASE_URL, ROUTES, API_ROUTES } from "../constants";
 import { useFetch } from "../hooks/useFetch";
 import { Navbar } from "../components/NavBar";
 import { Loading } from "../components/Loading";
@@ -10,7 +10,7 @@ export const OrderSummary = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const { data, loading, error } = useFetch(
-    `${API_BASE_URL}/orders/id/${orderId}`,
+    `${API_BASE_URL}${API_ROUTES.orders.getById(orderId)}`,
   );
 
   const order = data?.data?.order;

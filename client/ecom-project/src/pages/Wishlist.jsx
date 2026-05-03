@@ -1,5 +1,5 @@
 import { useFetch } from "../hooks/useFetch";
-import { API_BASE_URL, ROUTES } from "../constants";
+import { API_BASE_URL, ROUTES, API_ROUTES } from "../constants";
 import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { Navbar } from "../components/NavBar";
@@ -81,7 +81,7 @@ export const Wishlist = () => {
             <p className="text-muted">Your wishlist is empty.</p>
             <button
               className="btn btn-warning fw-semibold"
-              onClick={() => navigate("/products")}
+              onClick={() => navigate(ROUTES.PRODUCTS)}
             >
               Shop Now
             </button>

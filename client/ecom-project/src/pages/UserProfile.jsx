@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Navbar } from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL, API_ROUTES } from "../constants";
 import { Loading } from "../components/Loading";
 import { useAddress } from "../contexts/AddressContext";
 import { AddressForm } from "../components/AddressForm";
@@ -24,7 +24,7 @@ export const UserProfile = () => {
   const addresses = addressData?.data?.addresses ?? [];
 
   const { data: orderData, loading: orderLoading } = useFetch(
-    `${API_BASE_URL}/orders`,
+    `${API_BASE_URL}${API_ROUTES.orders.getAll}`,
   );
   const orders = orderData?.data?.orders ?? [];
   return (
