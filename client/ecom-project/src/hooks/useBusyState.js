@@ -2,14 +2,14 @@ import { useRef, useState } from "react";
 
 const useBusyState = (loadingState) => {
   const [isBusy, setIsBusy] = useState(false);
-  const trackState = useRef([]);
+  const trackState = useRef(false);
 
-  if (trackState.current.length === 0 && isBusy && loadingState)
-    trackState.current.push(1);
+  if (trackState.current === false && isBusy && loadingState)
+    trackState.current = true;
 
-  if (trackState.current.length === 1 && isBusy && !loadingState) {
+  if (trackState.current === true && isBusy && !loadingState) {
     setIsBusy(false);
-    trackState.current = [];
+    trackState.current = false;
   }
 
   return { isBusy, setIsBusy };
