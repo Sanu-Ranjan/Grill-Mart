@@ -41,7 +41,7 @@ export const AddressUpdateForm = ({
       }
 
       const res = await fetch(
-        `${API_BASE_URL}/address/${API_ROUTES.address.getById(_id)}`,
+        `${API_BASE_URL}${API_ROUTES.address.getById(_id)}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
