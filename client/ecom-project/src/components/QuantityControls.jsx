@@ -1,19 +1,12 @@
 import { useRef, useState } from "react";
 import { useCart } from "../contexts/CartContext";
+import { useBusyState } from "../hooks/useBusyState";
 
 export const QuantityControls = ({ product, btnWarning = true }) => {
-  const [isBusy, setIsBusy] = useState(false);
-  const trackState = useRef([]);
   const { addToCart, itemMap, decQty, removeItem, loading } = useCart();
+  const { isBusy, setIsBusy } = useBusyState(loading);
   const isInCart = itemMap.has(product?._id);
   const quantity = itemMap.get(product?._id);
-
-  if (trackState.current.length === 0 && isBusy && loading)
-    trackState.current.push(1);
-  if (trackState.current.length === 1 && isBusy && !loading) {
-    setIsBusy(false);
-    trackState.current = [];
-  }
 
   const handleAddtoCart = async () => {
     setIsBusy(true);

@@ -5,24 +5,17 @@ import { toast } from "react-toastify";
 import { useCart } from "../contexts/CartContext";
 import { useAddress } from "../contexts/AddressContext";
 import { API_BASE_URL, ROUTES } from "../constants";
+import { useBusyState } from "../hooks/useBusyState";
 
 export const CheckoutBtn = () => {
-  const [isBusy, setIsBusy] = useState(false);
-  const trackState = useRef([]);
   const navigate = useNavigate();
 
   const { items, loading, emptyCart } = useCart();
+  const { isBusy, setIsBusy } = useBusyState(loading);
 
   const { addressData, selectedAddressId } = useAddress();
   const addresses = addressData?.data?.addresses ?? [];
   const selectedAddress = addresses.find(({ _id }) => selectedAddressId == _id);
-
-  if (trackState.current.length === 0 && isBusy && loading)
-    trackState.current.push(1);
-  if (trackState.current.length === 1 && isBusy && !loading) {
-    setIsBusy(false);
-    trackState.current = [];
-  }
 
   const placeOrder = (items) => {
     const orderItems = items.map(({ product, quantity }) => ({

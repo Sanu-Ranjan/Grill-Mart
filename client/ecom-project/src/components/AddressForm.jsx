@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { API_BASE_URL } from "../constants";
 import { useAddress } from "../contexts/AddressContext";
+import { useBusyState } from "../hooks/useBusyState";
 
 export const AddressForm = ({ onSuccess }) => {
   const [form, setForm] = useState({
@@ -13,15 +14,7 @@ export const AddressForm = ({ onSuccess }) => {
     type: "Home",
   });
   const { addressLoading } = useAddress();
-  const [isBusy, setIsBusy] = useState(false);
-  const trackState = useRef([]);
-
-  if (trackState.current.length === 0 && isBusy && addressLoading)
-    trackState.current.push(1);
-  if (trackState.current.length === 1 && isBusy && !addressLoading) {
-    setIsBusy(false);
-    trackState.current = [];
-  }
+  const { isBusy, setIsBusy } = useBusyState(addressLoading);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));

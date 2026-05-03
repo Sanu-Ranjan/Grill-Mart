@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useBusyState } from "../hooks/useBusyState";
 
 export const CartItemBtns = ({
   addItem,
@@ -9,15 +10,7 @@ export const CartItemBtns = ({
   quantity,
   product,
 }) => {
-  const [isBusy, setIsBusy] = useState(false);
-  const trackState = useRef([]);
-
-  if (trackState.current.length === 0 && isBusy && loading)
-    trackState.current.push(1);
-  if (trackState.current.length === 1 && isBusy && !loading) {
-    setIsBusy(false);
-    trackState.current = [];
-  }
+  const { isBusy, setIsBusy } = useBusyState(loading);
 
   const handleAddtoCart = async (id) => {
     setIsBusy(true);

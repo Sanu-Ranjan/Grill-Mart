@@ -1,13 +1,12 @@
 import { useRef, useState } from "react";
 import { API_BASE_URL } from "../constants";
 import { useAddress } from "../contexts/AddressContext";
+import { useBusyState } from "../hooks/useBusyState";
 
 export const AddressUpdateForm = ({
   presentAddress,
   onSuccess,
   cancelEdit,
-  isBusy,
-  setIsBusy,
 }) => {
   const { _id, name, type, addressLine, city, state, pincode, phone } =
     presentAddress;
@@ -22,14 +21,7 @@ export const AddressUpdateForm = ({
   });
   const { addressLoading } = useAddress();
 
-  const trackState = useRef([]);
-
-  if (trackState.current.length === 0 && isBusy && addressLoading)
-    trackState.current.push(1);
-  if (trackState.current.length === 1 && isBusy && !addressLoading) {
-    setIsBusy(false);
-    trackState.current = [];
-  }
+  const { isBusy, setIsBusy } = useBusyState(addressLoading);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));

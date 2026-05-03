@@ -1,18 +1,11 @@
 import { useRef, useState } from "react";
 import { useWishlist } from "../contexts/WishlistContext";
+import { useBusyState } from "../hooks/useBusyState";
 
 export const WishListButton = ({ product, text }) => {
   const { wishlistSet, deleteItem, addItem, loading } = useWishlist();
   const isWishlisted = wishlistSet.has(product?._id);
-  const [isBusy, setIsBusy] = useState(false);
-  const trackState = useRef([]);
-
-  if (trackState.current.length === 0 && isBusy && loading)
-    trackState.current.push(1);
-  if (trackState.current.length === 1 && isBusy && !loading) {
-    setIsBusy(false);
-    trackState.current = [];
-  }
+  const { isBusy, setIsBusy } = useBusyState(loading);
 
   const handleDelete = async () => {
     setIsBusy(true);
