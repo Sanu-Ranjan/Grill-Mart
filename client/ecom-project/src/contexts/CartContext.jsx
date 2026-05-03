@@ -188,8 +188,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  console.log("items:", items);
-
   return (
     <CartContext.Provider
       value={{
