@@ -1,7 +1,7 @@
 import { ROUTES } from "../constants";
 import { useNavigate } from "react-router-dom";
 
-export const OredredProductCard = ({ item }) => {
+export const OrderedProductCard = ({ item }) => {
   const navigate = useNavigate();
 
   return (

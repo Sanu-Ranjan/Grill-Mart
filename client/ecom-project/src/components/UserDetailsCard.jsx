@@ -5,7 +5,7 @@ const staticUser = {
   avatar: "SR",
 };
 
-export const UserDeatilsCard = () => {
+export const UserDetailsCard = () => {
   return (
     <>
       <div className="d-flex align-items-center gap-4 mb-4">

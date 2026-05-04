@@ -4,7 +4,7 @@ import { useFetch } from "../hooks/useFetch";
 import { Navbar } from "../components/NavBar";
 import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
-import { OredredProductCard } from "../components/OrderedProductCard";
+import { OrderedProductCard } from "../components/OrderedProductCard";
 
 export const OrderSummary = () => {
   const { orderId } = useParams();
@@ -54,7 +54,7 @@ export const OrderSummary = () => {
           <hr />
           <div className="d-flex flex-column gap-3">
             {items?.map((item) => (
-              <OredredProductCard item={item} key={item._id} />
+              <OrderedProductCard item={item} key={item._id} />
             ))}
           </div>
         </div>

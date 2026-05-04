@@ -8,7 +8,7 @@ import { useAddress } from "../contexts/AddressContext";
 import { AddressForm } from "../components/AddressForm";
 import { AddressCard } from "../components/AddressCard";
 import { OrderCard } from "../components/OrderCard";
-import { UserDeatilsCard } from "../components/UserDetails";
+import { UserDetailsCard } from "../components/UserDetailsCard";
 
 export const UserProfile = () => {
   const navigate = useNavigate();
