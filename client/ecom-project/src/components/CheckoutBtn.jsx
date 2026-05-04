@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import { postData } from "../utils/postData";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";

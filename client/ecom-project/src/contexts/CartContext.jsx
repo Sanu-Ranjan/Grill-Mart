@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useRef, useEffect } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL, API_ROUTES } from "../constants/index";
 import { putData } from "../utils/putData";
-import { postData } from "../utils/postData";
 import { toast } from "react-toastify";
 
 const CartContext = createContext();

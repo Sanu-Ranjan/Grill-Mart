@@ -11,7 +11,6 @@ import { ProductSizes } from "../components/ProductSizes";
 import { Rating } from "../components/Rating";
 import { WishListButton } from "../components/WishlistButton";
 import { useAddress } from "../contexts/AddressContext";
-import { useCart } from "../contexts/CartContext";
 import { postData } from "../utils/postData";
 
 export const ProductDetails = () => {

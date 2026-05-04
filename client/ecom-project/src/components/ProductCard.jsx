@@ -1,16 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../constants/index";
 import { useWishlist } from "../contexts/WishlistContext";
-import { useState } from "react";
-import { useCart } from "../contexts/CartContext";
 import { QuantityControls } from "../components/QuantityControls";
 import { Rating } from "./Rating";
 import { WishListButton } from "./WishlistButton";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
-  const { data, addItem, wishlistSet, deleteItem } = useWishlist();
-  const { items, addToCart, itemMap, decQty, removeItem } = useCart();
+  const { wishlistSet } = useWishlist();
 
   return (
     <div

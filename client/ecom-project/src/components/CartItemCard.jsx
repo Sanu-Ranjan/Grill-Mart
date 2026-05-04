@@ -6,8 +6,7 @@ import { useWishlist } from "../contexts/WishlistContext";
 
 export const CartItemCard = ({ product, quantity }) => {
   const navigate = useNavigate();
-  const { loading, error, addToCart, decQty, removeItem, emptyCart } =
-    useCart();
+  const { loading, addToCart, decQty, removeItem } = useCart();
   const { addItem } = useWishlist();
 
   return (

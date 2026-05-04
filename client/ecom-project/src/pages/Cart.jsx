@@ -1,31 +1,18 @@
-import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL, ROUTES } from "../constants";
 import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { Navbar } from "../components/NavBar";
 import { useCart } from "../contexts/CartContext";
-import { useWishlist } from "../contexts/WishlistContext";
 import { useAddress } from "../contexts/AddressContext";
 import { AddressCard } from "../components/AddressCard";
-import { postData } from "../utils/postData";
 import { CheckoutBtn } from "../components/CheckoutBtn";
 import { CartItemCard } from "../components/CartItemCard";
 
 export const Cart = () => {
   const navigate = useNavigate();
-  const {
-    cart,
-    items,
-    loading,
-    error,
-    addToCart,
-    decQty,
-    removeItem,
-    emptyCart,
-  } = useCart();
-  const { addItem } = useWishlist();
+  const { cart, items, loading, error, emptyCart } = useCart();
+
   const { addressData, selectedAddressId } = useAddress();
   const addresses = addressData?.data?.addresses ?? [];
   const selectedAddress = addresses.find(({ _id }) => selectedAddressId == _id);

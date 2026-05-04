@@ -1,5 +1,3 @@
-import { toast } from "react-toastify";
-
 const isValidPhone = (phone) => {
   return /^[1-9]\d{9}$/.test(phone);
 };

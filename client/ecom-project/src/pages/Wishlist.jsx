@@ -1,4 +1,3 @@
-import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL, ROUTES, API_ROUTES } from "../constants";
 import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
@@ -6,7 +5,6 @@ import { Navbar } from "../components/NavBar";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../contexts/WishlistContext";
 import { useCart } from "../contexts/CartContext";
-import { useRef, useState } from "react";
 import { useBusyState } from "../hooks/useBusyState";
 
 const Buttons = ({ addToCart, deleteItem, item, loading }) => {

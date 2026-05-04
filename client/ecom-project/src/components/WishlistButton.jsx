@@ -1,8 +1,7 @@
-import { useRef, useState } from "react";
 import { useWishlist } from "../contexts/WishlistContext";
 import { useBusyState } from "../hooks/useBusyState";
 
-export const WishListButton = ({ product, text }) => {
+export const WishListButton = ({ product }) => {
   const { wishlistSet, deleteItem, addItem, loading } = useWishlist();
   const isWishlisted = wishlistSet.has(product?._id);
   const { isBusy, setIsBusy } = useBusyState(loading);

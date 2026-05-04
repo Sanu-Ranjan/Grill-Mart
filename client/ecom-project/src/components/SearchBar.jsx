@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearch } from "../contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../constants";
 
 export const SearchBaar = () => {
   const [focused, setFocused] = useState(false);
-  const { search, product, setSearch, setProduct } = useSearch();
+  const { product, setSearch, setProduct } = useSearch();
   const navigate = useNavigate();
 
   const pressEnter = (key) => {

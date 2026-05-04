@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Navbar } from "../components/NavBar";
-import { useNavigate } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL, API_ROUTES } from "../constants";
 import { Loading } from "../components/Loading";
@@ -11,15 +10,8 @@ import { OrderCard } from "../components/OrderCard";
 import { UserDetailsCard } from "../components/UserDetailsCard";
 
 export const UserProfile = () => {
-  const navigate = useNavigate();
   const [showAddForm, setShowAddForm] = useState(false);
-  const {
-    addressData,
-    addressLoading,
-    setRefresh,
-    selectedAddressId,
-    setSelectedAddressId,
-  } = useAddress();
+  const { addressData, addressLoading, setRefresh } = useAddress();
 
   const addresses = addressData?.data?.addresses ?? [];
 
