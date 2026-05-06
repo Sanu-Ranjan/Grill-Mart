@@ -13,7 +13,7 @@ const Navbar = () => {
     <nav className="navbar navbar-light bg-white shadow-sm px-4 py-3">
       <div className="container-fluid d-flex flex-column flex-sm-row align-items-center justify-content-between gap-2">
         <span
-          className="order-1 order-sm-1 fw-bold fs-5"
+          className="order-1 order-sm-1 fw-bold fs-2 fs-sm-5"
           style={{ cursor: "pointer" }}
           onClick={() => navigate(ROUTES.HOME)}
         >
