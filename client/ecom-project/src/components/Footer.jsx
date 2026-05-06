@@ -1,4 +1,3 @@
-// components/Footer.jsx
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../constants";
 
@@ -6,7 +5,7 @@ export const Footer = () => {
   const navigate = useNavigate();
 
   return (
-    <footer style={{ background: "#1a1a1a" }} className="mt-5 py-4">
+    <footer style={{ background: "#1a1a1a" }} className="mt-auto py-4">
       <div className="container">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4">
           <div>

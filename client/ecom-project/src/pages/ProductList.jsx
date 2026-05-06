@@ -93,41 +93,43 @@ export const ProductList = () => {
   const itemsCount = filteredProducts?.length ?? 0;
   return (
     <>
-      <Navbar />
-      <div className="container py-4">
-        <div className="row g-4">
-          <div className="col-12 col-md-3">
-            <FilterSidebar
-              categories={categories}
-              filters={filters}
-              onFilterChange={onFilterChange}
-              onClearFilters={onClearFilters}
-              clearSearchParam={() => setSearchParams({})}
-            />
-          </div>
+      <div className="d-flex flex-column" style={{ minHeight: "100vh" }}>
+        <Navbar />
+        <div className="container py-4">
+          <div className="row g-4">
+            <div className="col-12 col-md-3">
+              <FilterSidebar
+                categories={categories}
+                filters={filters}
+                onFilterChange={onFilterChange}
+                onClearFilters={onClearFilters}
+                clearSearchParam={() => setSearchParams({})}
+              />
+            </div>
 
-          <div className="col-12 col-md-9">
-            {itemsCount > 0 ? (
-              <p className="text-muted mb-3" style={{ fontSize: "14px" }}>
-                Showing {itemsCount} products
-              </p>
-            ) : (
-              <p className="text-center mb-3 " style={{ fontSize: "14px" }}>
-                No Products Found
-              </p>
-            )}
+            <div className="col-12 col-md-9">
+              {itemsCount > 0 ? (
+                <p className="text-muted mb-3" style={{ fontSize: "14px" }}>
+                  Showing {itemsCount} products
+                </p>
+              ) : (
+                <p className="text-center mb-3 " style={{ fontSize: "14px" }}>
+                  No Products Found
+                </p>
+              )}
 
-            <div className="row g-3">
-              {filteredProducts?.map((product) => (
-                <div className="col-12 col-sm-6 col-lg-4" key={product._id}>
-                  <ProductCard product={product} />
-                </div>
-              ))}
+              <div className="row g-3">
+                {filteredProducts?.map((product) => (
+                  <div className="col-12 col-sm-6 col-lg-4" key={product._id}>
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

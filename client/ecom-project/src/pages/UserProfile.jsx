@@ -22,67 +22,69 @@ export const UserProfile = () => {
   const orders = orderData?.data?.orders ?? [];
   return (
     <>
-      <Navbar />
-      <div className="container py-4" style={{ maxWidth: "700px" }}>
-        <UserDetailsCard />
+      <div className="d-flex flex-column" style={{ minHeight: "100vh" }}>
+        <Navbar />
+        <div className="container py-4" style={{ maxWidth: "700px" }}>
+          <UserDetailsCard />
 
-        <div className="card border shadow-sm p-4 mb-3">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h6 className="fw-bold mb-0">My Addresses</h6>
-            <button
-              className="btn btn-warning btn-sm fw-semibold"
-              onClick={() => setShowAddForm((prev) => !prev)}
-            >
-              {showAddForm ? "Cancel" : "+ Add New"}
-            </button>
+          <div className="card border shadow-sm p-4 mb-3">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h6 className="fw-bold mb-0">My Addresses</h6>
+              <button
+                className="btn btn-warning btn-sm fw-semibold"
+                onClick={() => setShowAddForm((prev) => !prev)}
+              >
+                {showAddForm ? "Cancel" : "+ Add New"}
+              </button>
+            </div>
+            <hr />
+
+            {showAddForm && (
+              <div className="mb-4">
+                <AddressForm
+                  onSuccess={() => {
+                    setShowAddForm(false);
+                    setRefresh((prev) => !prev);
+                  }}
+                />
+              </div>
+            )}
+
+            {addressLoading ? (
+              <Loading />
+            ) : addresses.length === 0 ? (
+              <p className="text-muted mb-0" style={{ fontSize: "13px" }}>
+                No addresses saved yet.
+              </p>
+            ) : (
+              <div className="d-flex flex-column gap-3">
+                {addresses.map((address) => (
+                  <AddressCard address={address} key={address._id} />
+                ))}
+              </div>
+            )}
           </div>
-          <hr />
 
-          {showAddForm && (
-            <div className="mb-4">
-              <AddressForm
-                onSuccess={() => {
-                  setShowAddForm(false);
-                  setRefresh((prev) => !prev);
-                }}
-              />
-            </div>
-          )}
-
-          {addressLoading ? (
-            <Loading />
-          ) : addresses.length === 0 ? (
-            <p className="text-muted mb-0" style={{ fontSize: "13px" }}>
-              No addresses saved yet.
-            </p>
-          ) : (
-            <div className="d-flex flex-column gap-3">
-              {addresses.map((address) => (
-                <AddressCard address={address} key={address._id} />
-              ))}
-            </div>
-          )}
+          <div className="card border shadow-sm p-4 mb-3">
+            <h6 className="fw-bold mb-3">Order History</h6>
+            <hr />
+            {orderLoading ? (
+              <Loading />
+            ) : orders.length === 0 ? (
+              <p className="text-muted mb-0" style={{ fontSize: "13px" }}>
+                No orders placed yet.
+              </p>
+            ) : (
+              <div className="d-flex flex-column gap-3">
+                {orders.map((order) => (
+                  <OrderCard order={order} key={order._id} />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-
-        <div className="card border shadow-sm p-4 mb-3">
-          <h6 className="fw-bold mb-3">Order History</h6>
-          <hr />
-          {orderLoading ? (
-            <Loading />
-          ) : orders.length === 0 ? (
-            <p className="text-muted mb-0" style={{ fontSize: "13px" }}>
-              No orders placed yet.
-            </p>
-          ) : (
-            <div className="d-flex flex-column gap-3">
-              {orders.map((order) => (
-                <OrderCard order={order} key={order._id} />
-              ))}
-            </div>
-          )}
-        </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };
