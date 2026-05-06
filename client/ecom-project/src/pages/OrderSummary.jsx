@@ -5,6 +5,7 @@ import { Navbar } from "../components/NavBar";
 import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { OrderedProductCard } from "../components/OrderedProductCard";
+import { Footer } from "../components/Footer";
 
 export const OrderSummary = () => {
   const { orderId } = useParams();
@@ -125,6 +126,7 @@ export const OrderSummary = () => {
           </button>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

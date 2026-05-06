@@ -8,6 +8,7 @@ import { Loading } from "../components/Loading";
 import { Error } from "../components/Error";
 import { FilterSidebar } from "../components/FilterSidebar";
 import { useSearch } from "../contexts/SearchContext";
+import { Footer } from "../components/Footer";
 
 export const ProductList = () => {
   const [filters, setFilters] = useState({
@@ -126,6 +127,7 @@ export const ProductList = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

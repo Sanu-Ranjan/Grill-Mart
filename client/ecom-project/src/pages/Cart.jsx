@@ -8,6 +8,7 @@ import { useAddress } from "../contexts/AddressContext";
 import { AddressCard } from "../components/AddressCard";
 import { CheckoutBtn } from "../components/CheckoutBtn";
 import { CartItemCard } from "../components/CartItemCard";
+import { Footer } from "../components/Footer";
 
 export const Cart = () => {
   const navigate = useNavigate();
@@ -133,6 +134,7 @@ export const Cart = () => {
           </div>
         )}
       </div>
+      <Footer />
     </>
   );
 };

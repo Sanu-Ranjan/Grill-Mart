@@ -1,5 +1,6 @@
 import { CategoryCard } from "../components/CategoryCard";
 import { Error } from "../components/Error";
+import { Footer } from "../components/Footer";
 import { Loading } from "../components/Loading";
 import { Navbar } from "../components/NavBar";
 import { API_BASE_URL, API_ROUTES, ROUTES } from "../constants/index";
@@ -62,6 +63,7 @@ const Home = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

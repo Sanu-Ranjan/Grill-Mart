@@ -12,6 +12,7 @@ import { Rating } from "../components/Rating";
 import { WishListButton } from "../components/WishlistButton";
 import { useAddress } from "../contexts/AddressContext";
 import { postData } from "../utils/postData";
+import { Footer } from "../components/Footer";
 
 export const ProductDetails = () => {
   const { id } = useParams();
@@ -219,6 +220,7 @@ export const ProductDetails = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

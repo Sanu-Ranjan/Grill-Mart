@@ -8,6 +8,7 @@ import { AddressForm } from "../components/AddressForm";
 import { AddressCard } from "../components/AddressCard";
 import { OrderCard } from "../components/OrderCard";
 import { UserDetailsCard } from "../components/UserDetailsCard";
+import { Footer } from "../components/Footer";
 
 export const UserProfile = () => {
   const [showAddForm, setShowAddForm] = useState(false);
@@ -23,7 +24,7 @@ export const UserProfile = () => {
     <>
       <Navbar />
       <div className="container py-4" style={{ maxWidth: "700px" }}>
-        <UserDeatilsCard />
+        <UserDetailsCard />
 
         <div className="card border shadow-sm p-4 mb-3">
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -81,6 +82,7 @@ export const UserProfile = () => {
           )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

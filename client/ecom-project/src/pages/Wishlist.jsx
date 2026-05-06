@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../contexts/WishlistContext";
 import { useCart } from "../contexts/CartContext";
 import { useBusyState } from "../hooks/useBusyState";
+import { Footer } from "../components/Footer";
 
 const Buttons = ({ addToCart, deleteItem, item, loading }) => {
   const { isBusy, setIsBusy } = useBusyState(loading);
@@ -138,6 +139,7 @@ export const Wishlist = () => {
           </div>
         )}
       </div>
+      <Footer />
     </>
   );
 };
