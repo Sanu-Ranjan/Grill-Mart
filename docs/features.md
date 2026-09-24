@@ -7,6 +7,18 @@
 
 ## Features
 
+### Authentication
+
+- Signup and login with
+  email and password
+- Browse products without
+  login
+- Cart, wishlist, checkout
+  and profile need login
+- Redirects back to the
+  previous page after login
+- Logout from the navbar
+
 ### Home Page
 
 - Landing page with featured

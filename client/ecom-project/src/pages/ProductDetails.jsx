@@ -11,6 +11,7 @@ import { ProductSizes } from "../components/ProductSizes";
 import { Rating } from "../components/Rating";
 import { WishListButton } from "../components/WishlistButton";
 import { useAddress } from "../contexts/AddressContext";
+import { useAuth } from "../contexts/AuthContext";
 import { postData } from "../utils/postData";
 import { Footer } from "../components/Footer";
 
@@ -26,6 +27,7 @@ export const ProductDetails = () => {
   const [quantity, setQuantity] = useState(0);
   const [categories, setCategories] = useState([]);
 
+  const { requireAuth } = useAuth();
   const { selectedAddressId, addressData } = useAddress();
   const addresses = addressData?.data?.addresses ?? [];
   const selectedAddress = addresses.find(({ _id }) => selectedAddressId == _id);
@@ -48,6 +50,8 @@ export const ProductDetails = () => {
   }, [product]); // runs when product loads
 
   const buyNow = (productId, quantity) => {
+    if (!requireAuth()) return;
+
     const orderItems = [
       {
         productId: productId,

@@ -3,16 +3,19 @@ import { useFetch } from "../hooks/useFetch";
 import { API_BASE_URL, API_ROUTES } from "../constants/index";
 import { putData } from "../utils/putData";
 import { toast } from "react-toastify";
+import { useAuth } from "./AuthContext";
 
 const CartContext = createContext();
 
 const getCartUrl = `${API_BASE_URL}${API_ROUTES.cart.get}`;
-const updateCartUrl = (id) => `${API_BASE_URL}${API_ROUTES.cart.update(id)}`;
+const updateCartUrl = `${API_BASE_URL}${API_ROUTES.cart.update}`;
 
 export const CartProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false);
-  const { data, loading, error } = useFetch(getCartUrl, refresh);
-  const cart = data?.data?.cart?.[0];
+  const { token, requireAuth } = useAuth();
+  // no token, no request: cart is empty while logged out
+  const { data, loading, error } = useFetch(token ? getCartUrl : null, refresh);
+  const cart = data?.data?.cart;
   const cartId = cart?._id;
   const items = cart?.items ?? [];
   const itemsRef = useRef(items);
@@ -44,6 +47,8 @@ export const CartProvider = ({ children }) => {
     }));
 
   const addToCart = async (id) => {
+    if (!requireAuth()) return;
+
     const currentItems = itemsRef.current;
     const previousItems = currentItems;
 
@@ -70,7 +75,7 @@ export const CartProvider = ({ children }) => {
     };
 
     try {
-      const { data, error } = await putData(updateCartUrl(cartId), body);
+      const { data, error } = await putData(updateCartUrl, body);
       if (error) {
         itemsRef.current = previousItems;
         return console.log("error updating cart : ", error);
@@ -112,7 +117,7 @@ export const CartProvider = ({ children }) => {
     };
 
     try {
-      const { data, error } = await putData(updateCartUrl(cartId), body);
+      const { data, error } = await putData(updateCartUrl, body);
       if (error) {
         itemsRef.current = previousItems;
         return console.log("error updating cart : ", error);
@@ -145,7 +150,7 @@ export const CartProvider = ({ children }) => {
     };
 
     try {
-      const { data, error } = await putData(updateCartUrl(cartId), body);
+      const { data, error } = await putData(updateCartUrl, body);
       if (error) {
         itemsRef.current = previousItems;
         return console.log("error updating cart : ", error);
@@ -171,7 +176,7 @@ export const CartProvider = ({ children }) => {
       items: [],
     };
     try {
-      const { data, error } = await putData(updateCartUrl(cartId), body);
+      const { data, error } = await putData(updateCartUrl, body);
       if (error) {
         itemsRef.current = previousItems;
         return console.log("Error emptying Cart : ", error);

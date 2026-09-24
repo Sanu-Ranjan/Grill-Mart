@@ -8,6 +8,8 @@ const wishlist = require("./routes/wishlist.routes");
 const address = require("./routes/address.routes");
 const order = require("./routes/order.routes");
 const ai = require("./routes/ai.routes");
+const auth = require("./routes/auth.routes");
+const { verifyToken } = require("./middleware/auth.middleware");
 
 const app = express();
 
@@ -19,6 +21,11 @@ if (!ALLOWED_ORIGINS) {
   process.exit(1);
 }
 
+if (!process.env.JWT_SECRET) {
+  console.log("Error : JWT_SECRET not set");
+  process.exit(1);
+}
+
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
 
 app.use(
@@ -27,13 +34,17 @@ app.use(
   }),
 );
 
+// public routes
+app.use("/api/v1/auth", auth.router);
 app.use("/api/v1/categories", category.router);
 app.use("/api/v1/products", product.router);
-app.use("/api/v1/cart", cart.router);
-app.use("/api/v1/wishlist", wishlist.router);
-app.use("/api/v1/address", address.router);
-app.use("/api/v1/orders", order.router);
 app.use("/api/v1/ai", ai.router);
+
+// protected routes: every request needs a valid token
+app.use("/api/v1/cart", verifyToken, cart.router);
+app.use("/api/v1/wishlist", verifyToken, wishlist.router);
+app.use("/api/v1/address", verifyToken, address.router);
+app.use("/api/v1/orders", verifyToken, order.router);
 
 module.exports = {
   app,

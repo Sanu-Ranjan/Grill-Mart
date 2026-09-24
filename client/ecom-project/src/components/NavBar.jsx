@@ -4,6 +4,9 @@ import { SearchBaar } from "./SearchBar";
 import { CartIcon } from "./CartIcon";
 import { WishlistIcon } from "./WishlistIcon";
 import { ROUTES } from "../constants/index";
+import { useAuth } from "../contexts/AuthContext";
+import { LoginBtn } from "./LoginBtn";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -20,9 +23,18 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const { isLoggedIn, logout } = useAuth();
+
   const handleNav = (route) => {
     navigate(route);
     setMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setMenuOpen(false);
+    navigate(ROUTES.HOME);
+    toast("Logged out");
   };
 
   return (
@@ -79,13 +91,32 @@ const Navbar = () => {
                 >
                   🛒 Cart
                 </div>
-                <div
-                  className="px-3 py-2 fw-semibold"
-                  style={{ fontSize: "13px", cursor: "pointer" }}
-                  onClick={() => handleNav(ROUTES.PROFILE)}
-                >
-                  👤 Profile
-                </div>
+                {isLoggedIn ? (
+                  <>
+                    <div
+                      className="px-3 py-2 border-bottom fw-semibold"
+                      style={{ fontSize: "13px", cursor: "pointer" }}
+                      onClick={() => handleNav(ROUTES.PROFILE)}
+                    >
+                      👤 Profile
+                    </div>
+                    <div
+                      className="px-3 py-2 fw-semibold text-danger"
+                      style={{ fontSize: "13px", cursor: "pointer" }}
+                      onClick={handleLogout}
+                    >
+                      ↩ Logout
+                    </div>
+                  </>
+                ) : (
+                  <div
+                    className="px-3 py-2 fw-semibold"
+                    style={{ fontSize: "13px", cursor: "pointer" }}
+                    onClick={() => handleNav(ROUTES.LOGIN)}
+                  >
+                    🔑 Login
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -110,13 +141,26 @@ const Navbar = () => {
         <div className="d-flex align-items-center gap-3">
           <WishlistIcon />
           <CartIcon />
-          <span
-            className="btn btn-warning"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate(ROUTES.PROFILE)}
-          >
-            <i className="bi bi-person-fill-gear"></i>
-          </span>
+          {isLoggedIn ? (
+            <>
+              <span
+                className="btn btn-warning"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(ROUTES.PROFILE)}
+              >
+                <i className="bi bi-person-fill-gear"></i>
+              </span>
+              <button
+                className="btn btn-outline-secondary"
+                onClick={handleLogout}
+                title="Logout"
+              >
+                <i className="bi bi-box-arrow-right"></i>
+              </button>
+            </>
+          ) : (
+            <LoginBtn />
+          )}
         </div>
       </div>
     </nav>

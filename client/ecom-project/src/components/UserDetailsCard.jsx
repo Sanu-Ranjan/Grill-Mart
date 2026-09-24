@@ -1,11 +1,20 @@
-const staticUser = {
-  name: "Sanu Ranjan",
-  email: "sanu@grillmart.com",
-  phone: "+91 9876543210",
-  avatar: "SR",
-};
+import { useAuth } from "../contexts/AuthContext";
+import { Loading } from "./Loading";
+
+// "Sanu Ranjan" -> "SR"
+const getInitials = (name = "") =>
+  name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join("");
 
 export const UserDetailsCard = () => {
+  const { user, authLoading } = useAuth();
+
+  if (!user) return authLoading ? <Loading /> : null;
+
   return (
     <>
       <div className="d-flex align-items-center gap-4 mb-4">
@@ -13,10 +22,10 @@ export const UserDetailsCard = () => {
           className="d-flex align-items-center justify-content-center rounded-circle bg-warning fw-bold"
           style={{ width: "72px", height: "72px", fontSize: "24px" }}
         >
-          {staticUser.avatar}
+          {getInitials(user.name)}
         </div>
         <div>
-          <h5 className="fw-bold mb-0">{staticUser.name}</h5>
+          <h5 className="fw-bold mb-0">{user.name}</h5>
           <p className="text-muted mb-0" style={{ fontSize: "13px" }}>
             GrillMart Member
           </p>
@@ -31,7 +40,7 @@ export const UserDetailsCard = () => {
               Full Name
             </p>
             <p className="fw-semibold mb-0" style={{ fontSize: "14px" }}>
-              {staticUser.name}
+              {user.name}
             </p>
           </div>
           <div className="col-12 col-sm-6">
@@ -39,7 +48,7 @@ export const UserDetailsCard = () => {
               Email
             </p>
             <p className="fw-semibold mb-0" style={{ fontSize: "14px" }}>
-              {staticUser.email}
+              {user.email}
             </p>
           </div>
           <div className="col-12 col-sm-6">
@@ -47,7 +56,7 @@ export const UserDetailsCard = () => {
               Phone
             </p>
             <p className="fw-semibold mb-0" style={{ fontSize: "14px" }}>
-              {staticUser.phone}
+              {user.phone || "Not added"}
             </p>
           </div>
         </div>

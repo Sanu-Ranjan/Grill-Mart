@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAddress } from "../contexts/AddressContext";
 import { AddressUpdateForm } from "./AddressUpdateForm";
 import { API_BASE_URL, API_ROUTES } from "../constants";
+import { authHeaders } from "../utils/auth";
 import { useBusyState } from "../hooks/useBusyState";
 
 export const AddressCard = ({ address }) => {
@@ -23,7 +24,10 @@ export const AddressCard = ({ address }) => {
         `${API_BASE_URL}${API_ROUTES.address.delete(_id)}`,
         {
           method: "DELETE",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...authHeaders(),
+          },
         },
       );
       const data = await res.json();

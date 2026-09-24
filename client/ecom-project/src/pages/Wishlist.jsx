@@ -56,7 +56,7 @@ export const Wishlist = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  const wishlist = data?.data?.wishlist?.[0];
+  const wishlist = data?.data?.wishlist;
   const items = wishlist?.items ?? [];
 
   if (loading) return <Loading />;

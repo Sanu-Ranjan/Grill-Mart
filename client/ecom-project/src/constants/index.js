@@ -6,10 +6,18 @@ export const ROUTES = {
   WISHLIST: "/wishlist",
   CART: "/cart",
   PROFILE: "/profile",
+  LOGIN: "/login",
+  SIGNUP: "/signup",
   ORDER_SUMMARY: (orderId) => `/ordersummary/${orderId}`,
 };
 
 export const API_ROUTES = {
+  auth: {
+    signup: "/auth/signup",
+    login: "/auth/login",
+    me: "/auth/me",
+  },
+
   products: {
     getAll: "/products",
     getById: (id) => `/products/${id}`,
@@ -25,13 +33,11 @@ export const API_ROUTES = {
 
   cart: {
     get: "/cart",
-    add: "/cart",
-    update: (id) => `/cart/${id}`,
+    update: "/cart",
   },
 
   wishlist: {
     get: "/wishlist",
-    create: "/wishlist",
     addItem: "/wishlist/item",
     deleteItem: "/wishlist",
   },

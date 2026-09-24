@@ -4,6 +4,7 @@ const { Category } = require("./categories.models");
 const { Order } = require("./order.models");
 const { Product } = require("./product.models");
 const { Wishlist } = require("./wishlist.models");
+const { User } = require("./user.models");
 
 module.exports = {
   Address,
@@ -12,4 +13,5 @@ module.exports = {
   Order,
   Product,
   Wishlist,
+  User,
 };

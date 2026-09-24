@@ -2,22 +2,19 @@ const { Cart } = require("../models/models.index");
 
 const { err, failure, ok, success } = require("../utils/response");
 
-let cartItems_cache = [];
-
-const cart = async () => {
+const cart = async (userId) => {
   try {
-    const data = await Cart.find().populate("items.product");
-    cartItems_cache = data;
+    const data = await Cart.findOne({ user: userId }).populate("items.product");
     return ok(data);
   } catch (error) {
     return err(error);
   }
 };
 
-const update = async (cartId, updatedItems) => {
+const update = async (userId, updatedItems) => {
   try {
-    const updated = await Cart.findByIdAndUpdate(
-      cartId,
+    const updated = await Cart.findOneAndUpdate(
+      { user: userId },
       { $set: { items: updatedItems } },
       { returnDocument: "after" },
     );
@@ -27,59 +24,42 @@ const update = async (cartId, updatedItems) => {
   }
 };
 
-const add = async (cart) => {
-  try {
-    const saved = await Cart.create(cart);
-    return ok(saved);
-  } catch (error) {
-    return err(error);
-  }
-};
-
 const getCart = async (req, res) => {
   try {
-    const { data, error } = await cart();
+    const { data, error } = await cart(req.user.id);
     if (error) {
       console.log("Error fetching cart", error);
       return res
         .status(500)
         .json(failure("Internal server error : database operation failed"));
     }
+    if (!data) {
+      return res.status(404).json(failure("Cart not found"));
+    }
     res.status(200).json(success({ cart: data }, "Cart fetched"));
   } catch (error) {
-    console.log("Error at controller: product ", error);
-    res.status(500).json(failure("Internal server error"));
-  }
-};
-
-const addCart = async (req, res) => {
-  const { items } = req.body;
-  try {
-    const { data, error } = await add({ items });
-    if (error) {
-      console.log("Error adding cart", error);
-      return res
-        .status(500)
-        .json(failure("Internal server error : database operation failed"));
-    }
-    res.status(201).json(success({ cart: data }, "Cart added"));
-  } catch (error) {
-    console.log("Error at controller: addCart ", error);
+    console.log("Error at controller: getCart ", error);
     res.status(500).json(failure("Internal server error"));
   }
 };
 
 const updateCart = async (req, res) => {
-  const { cartId } = req.params;
   const { items } = req.body;
 
+  if (!Array.isArray(items)) {
+    return res.status(400).json(failure("items must be an array"));
+  }
+
   try {
-    const { data, error } = await update(cartId, items);
+    const { data, error } = await update(req.user.id, items);
     if (error) {
       console.log("Error updating cart", error);
       return res
         .status(500)
         .json(failure("Internal server error : database operation failed"));
+    }
+    if (!data) {
+      return res.status(404).json(failure("Cart not found"));
     }
     res.status(200).json(success({ cart: data }, "Cart updated"));
   } catch (error) {
@@ -90,6 +70,5 @@ const updateCart = async (req, res) => {
 
 module.exports = {
   updateCart,
-  addCart,
   getCart,
 };

@@ -2,6 +2,15 @@
 
 ## Mongoose is used to manage schemas
 
+### Users
+
+- \_id (PK)
+- name: String
+- email: String (unique)
+- phone: String
+- password: String (bcrypt hash, never returned by default)
+- createdAt, updatedAt: Date
+
 ### Categories
 
 - \_id (PK)
@@ -26,16 +35,19 @@
 ### Cart
 
 - \_id (PK)
+- user: ObjectId (ref -> Users, unique)
 - items:array of {productId: ObjectId (ref -> Products),quantity: Number}
 
 ### Wishlist
 
 - \_id (PK)
+- user: ObjectId (ref -> Users, unique)
 - items:[ ObjectId (ref -> Products)]
 
 ### Addresses
 
 - \_id (PK)
+- user: ObjectId (ref -> Users)
 - name: String
 - phone: String
 - pincode: String
@@ -47,6 +59,7 @@
 ### Orders
 
 - \_id (PK)
+- user: ObjectId (ref -> Users)
 - items: Array of { productId: ObjectId (ref -> Products), name: String, price: Number, quantity: Number, image: String }
 - totalAmount: Number
 - deliveryCharge: Number

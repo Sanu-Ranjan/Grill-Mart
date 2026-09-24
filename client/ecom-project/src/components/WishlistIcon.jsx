@@ -6,7 +6,7 @@ export const WishlistIcon = () => {
   const { data } = useWishlist();
   const navigate = useNavigate();
 
-  const wishlist = data?.data?.wishlist?.[0];
+  const wishlist = data?.data?.wishlist;
   const items = wishlist?.items ?? [];
   const itemCount = items.length;
 

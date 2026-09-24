@@ -1,18 +1,18 @@
 const { Address } = require("../models/models.index");
 const { err, failure, ok, success } = require("../utils/response");
 
-const addresses = async () => {
+const addresses = async (userId) => {
   try {
-    const data = await Address.find();
+    const data = await Address.find({ user: userId });
     return ok(data);
   } catch (error) {
     return err(error);
   }
 };
 
-const addressById = async (id) => {
+const addressById = async (id, userId) => {
   try {
-    const data = await Address.findById(id);
+    const data = await Address.findOne({ _id: id, user: userId });
     return ok(data);
   } catch (error) {
     return err(error);
@@ -28,20 +28,22 @@ const create = async (address) => {
   }
 };
 
-const deleteById = async (id) => {
+const deleteById = async (id, userId) => {
   try {
-    const deleted = await Address.findByIdAndDelete(id);
+    const deleted = await Address.findOneAndDelete({ _id: id, user: userId });
     return ok(deleted);
   } catch (error) {
     return err(error);
   }
 };
 
-const updateById = async (id, data) => {
+const updateById = async (id, userId, data) => {
   try {
-    const updated = await Address.findByIdAndUpdate(id, data, {
-      returnDocument: "after",
-    });
+    const updated = await Address.findOneAndUpdate(
+      { _id: id, user: userId },
+      data,
+      { returnDocument: "after" },
+    );
     return ok(updated);
   } catch (error) {
     return err(error);
@@ -51,12 +53,15 @@ const updateById = async (id, data) => {
 const deleteAddress = async (req, res) => {
   try {
     const { id } = req.params;
-    const { data, error } = await deleteById(id);
+    const { data, error } = await deleteById(id, req.user.id);
     if (error) {
       console.log("Error deleting addresses", error);
       return res
         .status(500)
         .json(failure("Internal server error : database operation failed"));
+    }
+    if (!data) {
+      return res.status(404).json(failure("Address not found"));
     }
     res.status(200).json(success({ deleted: data }, "Address Deleted"));
   } catch (error) {
@@ -68,23 +73,36 @@ const deleteAddress = async (req, res) => {
 const updateAddressById = async (req, res) => {
   try {
     const { id } = req.params;
-    const body = req.body;
-    const { data, error } = await updateById(id, body);
+    // pick allowed fields only, so the client can never change `user`
+    const { name, phone, pincode, city, state, addressLine, type } = req.body;
+    const { data, error } = await updateById(id, req.user.id, {
+      name,
+      phone,
+      pincode,
+      city,
+      state,
+      addressLine,
+      type,
+    });
     if (error) {
       console.log("Error updating addresses", error);
       return res
         .status(500)
         .json(failure("Internal server error : database operation failed"));
     }
+    if (!data) {
+      return res.status(404).json(failure("Address not found"));
+    }
     res.status(200).json(success({ updated: data }, "Address Updated"));
   } catch (error) {
-    console.log("Error at controller: deleteAddress", error);
+    console.log("Error at controller: updateAddressById", error);
     res.status(500).json(failure("Internal server error"));
   }
 };
+
 const getAddresses = async (req, res) => {
   try {
-    const { data, error } = await addresses();
+    const { data, error } = await addresses(req.user.id);
     if (error) {
       console.log("Error fetching addresses", error);
       return res
@@ -101,7 +119,7 @@ const getAddresses = async (req, res) => {
 const getAddress = async (req, res) => {
   const { id } = req.params;
   try {
-    const { data, error } = await addressById(id);
+    const { data, error } = await addressById(id, req.user.id);
     if (error) {
       console.log("Error fetching address", error);
       return res
@@ -123,6 +141,7 @@ const addAddress = async (req, res) => {
 
   try {
     const { data, error } = await create({
+      user: req.user.id,
       name,
       phone,
       pincode,

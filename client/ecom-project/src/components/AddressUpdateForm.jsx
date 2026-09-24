@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { API_BASE_URL, API_ROUTES } from "../constants";
+import { authHeaders } from "../utils/auth";
 import { useAddress } from "../contexts/AddressContext";
 import { useBusyState } from "../hooks/useBusyState";
 import { validateForm } from "../utils/validateForm";
@@ -44,7 +45,10 @@ export const AddressUpdateForm = ({
         `${API_BASE_URL}${API_ROUTES.address.update(_id)}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...authHeaders(),
+          },
           body: JSON.stringify(form),
         },
       );

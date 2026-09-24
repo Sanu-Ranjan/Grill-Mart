@@ -4,6 +4,7 @@ import { API_BASE_URL, API_ROUTES } from "../constants";
 import { postData } from "../utils/postData";
 import { deleteData } from "../utils/deleteData";
 import { toast } from "react-toastify";
+import { useAuth } from "./AuthContext";
 
 const posturl = `${API_BASE_URL}${API_ROUTES.wishlist.addItem}`;
 const deleteUrl = `${API_BASE_URL}${API_ROUTES.wishlist.deleteItem}`;
@@ -14,15 +15,17 @@ const WishListContext = createContext();
 export const WishlistProvider = ({ children }) => {
   const [refresh, setRefresh] = useState(false);
 
-  const { data, loading, error } = useFetch(getWishlistUrl, refresh);
+  const { token, requireAuth } = useAuth();
 
-  const wishlist = data?.data?.wishlist?.[0];
+  const { data, loading, error } = useFetch(
+    token ? getWishlistUrl : null,
+    refresh,
+  );
+
+  const wishlist = data?.data?.wishlist;
   const addItem = async (productId) => {
-    if (!wishlist?._id) return;
-    const { data, error } = await postData(posturl, {
-      wishlistId: wishlist?._id,
-      productId: productId,
-    });
+    if (!requireAuth()) return;
+    const { data, error } = await postData(posturl, { productId });
     if (error) {
       console.log(error);
     } else if (data?.success) {
@@ -32,11 +35,8 @@ export const WishlistProvider = ({ children }) => {
   };
 
   const deleteItem = async (productId) => {
-    if (!wishlist?._id) return;
-    const { data, error } = await deleteData(deleteUrl, {
-      wishlistId: wishlist?._id,
-      productId: productId,
-    });
+    if (!requireAuth()) return;
+    const { data, error } = await deleteData(deleteUrl, { productId });
     if (error) {
       console.log(error);
     } else if (data?.success) {

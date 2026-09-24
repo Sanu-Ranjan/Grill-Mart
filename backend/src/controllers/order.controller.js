@@ -1,18 +1,22 @@
 const { Order, Product } = require("../models/models.index");
 const { err, failure, ok, success } = require("../utils/response");
 
-const orders = async () => {
+const orders = async (userId) => {
   try {
-    const data = await Order.find().populate("items.productId");
+    const data = await Order.find({ user: userId })
+      .sort({ placedAt: -1 })
+      .populate("items.productId");
     return ok(data);
   } catch (error) {
     return err(error);
   }
 };
 
-const orderById = async (id) => {
+const orderById = async (id, userId) => {
   try {
-    const data = await Order.findById(id).populate("items.productId");
+    const data = await Order.findOne({ _id: id, user: userId }).populate(
+      "items.productId",
+    );
     return ok(data);
   } catch (error) {
     return err(error);
@@ -54,9 +58,9 @@ const create = async (order) => {
   }
 };
 
-const remove = async (id) => {
+const remove = async (id, userId) => {
   try {
-    const deleted = await Order.findByIdAndDelete(id);
+    const deleted = await Order.findOneAndDelete({ _id: id, user: userId });
     return ok(deleted);
   } catch (error) {
     return err(error);
@@ -65,7 +69,7 @@ const remove = async (id) => {
 
 const getOrders = async (req, res) => {
   try {
-    const { data, error } = await orders();
+    const { data, error } = await orders(req.user.id);
     if (error) {
       console.log("Error fetching orders", error);
       return res
@@ -82,7 +86,7 @@ const getOrders = async (req, res) => {
 const getOrder = async (req, res) => {
   const { id } = req.params;
   try {
-    const { data, error } = await orderById(id);
+    const { data, error } = await orderById(id, req.user.id);
     if (error) {
       console.log("Error fetching order", error);
       return res
@@ -100,12 +104,17 @@ const getOrder = async (req, res) => {
 };
 
 const addOrder = async (req, res) => {
-  const { items, totalAmount, deliveryCharge, address } = req.body;
+  const { items, address } = req.body;
+
+  if (!Array.isArray(items) || items.length === 0 || !address) {
+    return res.status(400).json(failure("items and address are required"));
+  }
+
   try {
+    // totalAmount and deliveryCharge are always recalculated on the server
     const { data, error } = await create({
+      user: req.user.id,
       items,
-      totalAmount,
-      deliveryCharge,
       address,
     });
     if (error) {
@@ -125,7 +134,7 @@ const addOrder = async (req, res) => {
 const deleteOrder = async (req, res) => {
   const { orderId } = req.body;
   try {
-    const { data, error } = await remove(orderId);
+    const { data, error } = await remove(orderId, req.user.id);
     if (error) {
       console.log("Error deleting order", error);
       return res
