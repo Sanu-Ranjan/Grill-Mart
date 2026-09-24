@@ -16,7 +16,8 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-const User = model("User", userSchema);
+// own collection name so it doesn't clash with other projects' "users" in the same DB
+const User = model("User", userSchema, "grillMartUsers");
 
 module.exports = {
   User,
